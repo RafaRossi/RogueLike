@@ -463,15 +463,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7717845302073028438, guid: 799efbe070bce4247836f82072ce4987, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+    - target: {fileID: 5794795730279106873, guid: 799efbe070bce4247836f82072ce4987, type: 3}
+      propertyPath: triggerInputEvents.Array.data[0].triggerEventInput.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7868016263610771482, guid: 799efbe070bce4247836f82072ce4987, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5079873558304039238, guid: 799efbe070bce4247836f82072ce4987, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
