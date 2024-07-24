@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5326635069200871616}
   - component: {fileID: 7177575804335619996}
+  - component: {fileID: 5619673579203167003}
   m_Layer: 0
-  m_Name: Interactable Collider
+  m_Name: Character Interaction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,6 +56,80 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5619673579203167003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683196600016977208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b1affa97c9cc364e801f9b37491c635, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2511191477044222328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8707778459117264540}
+  - component: {fileID: 42259967183717380}
+  m_Layer: 0
+  m_Name: Entity Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8707778459117264540
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511191477044222328}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2761240716605353248}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &42259967183717380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511191477044222328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b513137c3d3f9574d92173b79cee33c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attributesData:
+  - <Entity>k__BackingField: 0
+    <Value>k__BackingField: 12
+  - <Entity>k__BackingField: 1
+    <Value>k__BackingField: 0
+  flags: 
+  onReceivedAttribute:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisposeAttribute:
+    m_PersistentCalls:
+      m_Calls: []
+  onReceivedFlag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisposeFlag:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7717845302073028438
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +226,7 @@ GameObject:
   - component: {fileID: 3015815539849440586}
   - component: {fileID: 5794795730279106873}
   - component: {fileID: 4031057885854720371}
-  - component: {fileID: 5079873558304039238}
+  - component: {fileID: 3623703459866910019}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -174,6 +249,7 @@ Transform:
   m_Children:
   - {fileID: 8986906049170577543}
   - {fileID: 5326635069200871616}
+  - {fileID: 8707778459117264540}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &3015815539849440586
@@ -237,9 +313,25 @@ MonoBehaviour:
     triggerEventInput:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 5079873558304039238}
+        - m_Target: {fileID: 5619673579203167003}
           m_TargetAssemblyTypeName: CharacterInteraction, Assembly-CSharp
           m_MethodName: Interact
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - triggerInputName: Dash
+    triggerEventInput:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3623703459866910019}
+          m_TargetAssemblyTypeName: CharacterDash, Assembly-CSharp
+          m_MethodName: Dash
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -262,8 +354,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 3015815539849440586}
-  characterMovementStats: {fileID: 11400000, guid: 9dbbcc5ec20d8404b81dd53fc108b3ef, type: 2}
---- !u!114 &5079873558304039238
+  statsManager: {fileID: 42259967183717380}
+--- !u!114 &3623703459866910019
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -272,6 +364,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7868016263610771482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b1affa97c9cc364e801f9b37491c635, type: 3}
+  m_Script: {fileID: 11500000, guid: e26471426b83c0641a13defcf5fd182d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterMovement: {fileID: 4031057885854720371}
+  statsManager: {fileID: 42259967183717380}
+  characterDashSpeed: 32
+  characterDashDuration: 0.2
