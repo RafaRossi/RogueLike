@@ -112,12 +112,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09119d94d042b214e8b4c50586ae72dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MoveSpeed>k__BackingField:
+  stats:
+  - <StatID>k__BackingField: 0
     <BaseValue>k__BackingField: 10
-  <AttackSpeed>k__BackingField:
-    <BaseValue>k__BackingField: 0
-  <DashDuration>k__BackingField:
+  - <StatID>k__BackingField: 1
     <BaseValue>k__BackingField: 0.2
+  - <StatID>k__BackingField: 2
+    <BaseValue>k__BackingField: 10
+  - <StatID>k__BackingField: 3
+    <BaseValue>k__BackingField: 0.8
 --- !u!1 &3151972581241672051
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +167,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentWeapon: {fileID: 0}
-  statsComponent: {fileID: 0}
 --- !u!1 &4433436943929707620
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,7 +515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 3015815539849440586}
   characterFlags: {fileID: 1113956715161831708}
-  playerStatsComponent: {fileID: 6213684278096579064}
+  statsComponent: {fileID: 0}
   characterDashSpeed:
     value: 20
     type: 100
@@ -590,8 +592,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth:
+    <StatID>k__BackingField: 0
     <BaseValue>k__BackingField: 0
   currentHealth:
+    <StatID>k__BackingField: 0
     <BaseValue>k__BackingField: 0
   onDie:
     m_PersistentCalls:

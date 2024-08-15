@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Framework.Stats
 {
     public enum StatModifierType

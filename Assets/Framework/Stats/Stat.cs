@@ -7,7 +7,9 @@ namespace Framework.Stats
     [Serializable]
     public class Stat
     {
+        [field:SerializeField] public StatID StatID { get; set; }
         [field:SerializeField] public float BaseValue { get; set; }
+        private event Action OnStatChanged = delegate {  };
 
         public float Value
         {
@@ -96,7 +98,19 @@ namespace Framework.Stats
                 }
             }
 
+            OnStatChanged?.Invoke();
+            
             return (float)Math.Round(finalValue, 4);
+        }
+
+        public void AddOnStatChangeListener(Action onStatChanged)
+        {
+            OnStatChanged += onStatChanged;
+        }
+        
+        public void RemoveOnStatChangeListener(Action onStatChanged)
+        {
+            OnStatChanged -= onStatChanged;
         }
     }
 }

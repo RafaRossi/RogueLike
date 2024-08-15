@@ -6,7 +6,7 @@ namespace Framework.Weapons
     public class WeaponHolder : MonoBehaviour
     {
         [SerializeField] private BaseWeapon currentWeapon;
-        [SerializeField] private StatsComponent statsComponent;
+        public StatsComponent StatsComponent { get; private set; }
         
         public void UseWeaponRequest()
         {
@@ -21,6 +21,7 @@ namespace Framework.Weapons
             if(currentWeapon != null) Destroy(currentWeapon.gameObject);
             
             currentWeapon = Instantiate(weaponPrefab, transform);
+            currentWeapon.InitializeWeapon(this);
         }
     }
 }

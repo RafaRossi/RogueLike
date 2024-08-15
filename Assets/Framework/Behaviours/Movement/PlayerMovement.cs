@@ -13,6 +13,9 @@ namespace Framework.Behaviours.Movement
         [SerializeField] private PlayerStatsComponent playerStatsComponent;
         
         [SerializeField] private StatModifier characterDashSpeed;
+
+        private Stat _moveSpeed;
+        private Stat _dashDuration;
         
         private Camera _camera;
 
@@ -21,6 +24,9 @@ namespace Framework.Behaviours.Movement
         private void Awake()
         {
             _camera ??= Camera.main;
+
+            _moveSpeed = playerStatsComponent.MoveSpeed;
+            _dashDuration = playerStatsComponent.DashDuration;
         }
 
         public void Move(Vector3 movementDirection)
@@ -31,7 +37,7 @@ namespace Framework.Behaviours.Movement
         
             _movementDirection = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * _movementDirection;
         
-            characterController.Move(_movementDirection.normalized * (playerStatsComponent.MoveSpeed.Value * Time.deltaTime));
+            characterController.Move(_movementDirection.normalized * (_moveSpeed.Value * Time.deltaTime));
         }
 
         private static float AngleBetweenTwoPoints(Vector3 a, Vector3 b) {
@@ -61,21 +67,21 @@ namespace Framework.Behaviours.Movement
         
                 var startTime = Time.time;
                 
-                playerStatsComponent.MoveSpeed.AddModifier(characterDashSpeed);
+                _moveSpeed.AddModifier(characterDashSpeed);
 
-                while (Time.time < startTime + playerStatsComponent.DashDuration.Value)
+                while (Time.time < startTime + _dashDuration.Value)
                 {
-                    characterController.Move(_movementDirection.normalized * (playerStatsComponent.MoveSpeed.Value * Time.deltaTime));
+                    characterController.Move(_movementDirection.normalized * (_moveSpeed.Value * Time.deltaTime));
                 
                     yield return null;
                 }
 
-                playerStatsComponent.MoveSpeed.RemoveModifier(characterDashSpeed);
+                _moveSpeed.RemoveModifier(characterDashSpeed);
                 characterFlags.RemoveFlag(Flag.IsDashing);
             }
         }
-        
-        public Stat GetCharacterMoveSpeed() => playerStatsComponent.MoveSpeed;
-    
+
+        public Stat GetCharacterMoveSpeed() => _moveSpeed;
+
     }
 }
