@@ -30,7 +30,11 @@ namespace Framework.Inputs
             foreach (var mouseInputEvent in mouseInputEvents)
             {
                 mouseInputEvent.positionEventInput?.Invoke(Input.mousePosition);
-                mouseInputEvent.triggerClickEventInput?.Invoke();
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    mouseInputEvent.triggerClickEventInput?.Invoke();
+                }
             }
         }
     }

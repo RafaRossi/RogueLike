@@ -1,6 +1,8 @@
 using System.Collections;
+using Framework.Behaviours.Target;
 using Framework.Entities;
 using Framework.Stats;
+using Project.Utils;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -39,20 +41,33 @@ namespace Framework.Behaviours.Movement
         
             characterController.Move(_movementDirection.normalized * (_moveSpeed.Value * Time.deltaTime));
         }
-
-        private static float AngleBetweenTwoPoints(Vector3 a, Vector3 b) {
-            return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
-        }
-
+        
         public void Rotate(Vector3 facingDirection)
         {
-            var positionOnScreen = _camera.WorldToViewportPoint (transform.position);
-            var mouseOnScreen = (Vector2)_camera.ScreenToViewportPoint(Input.mousePosition);
-        
-            var angle = AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen) + _camera.transform.eulerAngles.y;
-        
-            transform.rotation =  Quaternion.Euler(new Vector3(0f,180 - angle,0f));
+            var targetPosition = TryGetTarget(facingDirection);
+
+            transform.LookAt(new Vector3(targetPosition.x, transform.position.y, targetPosition.z));
         }
+        
+        private Vector3 TryGetTarget(Vector3 mousePosition)
+        {
+            var ray = _camera.ScreenPointToRay(mousePosition);
+            
+            if (Physics.Raycast(ray, out var hit))
+            {
+                if (hit.collider.gameObject.GetComponent<TargetComponent>() != null)
+                {
+                    return hit.collider.transform.position;
+                }
+            }
+
+            var plane = new Plane(Vector3.up, transform.position);
+
+            plane.Raycast(ray, out var distance);
+            return ray.GetPoint(distance);
+        }
+        
+        
     
         public void Dash()
         {
