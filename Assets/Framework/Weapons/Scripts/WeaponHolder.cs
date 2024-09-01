@@ -23,12 +23,14 @@ namespace Framework.Weapons.Scripts
 
         public void UseWeaponRequest()
         {
-            _currentWeapon?.UseWeapon();
+            _currentWeapon?.UseWeapon(this);
         }
 
-        public void InstantiateWeapon(WeaponFactory weaponFactory)
+        private void InstantiateWeapon(WeaponFactory weaponFactory)
         {
             _currentWeapon = weaponFactory.CreateWeapon(transform);
         }
+
+        public IWeapon GetCurrentWeapon() => _currentWeapon;
     }
 }

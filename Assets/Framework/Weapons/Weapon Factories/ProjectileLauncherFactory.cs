@@ -1,6 +1,5 @@
 using Framework.Weapons.Scripts;
 using Framework.Weapons.Weapon_Assets.Projectile_Launcher;
-using Framework.Weapons.Weapon_Assets.Rock_Launcher;
 using UnityEngine;
 
 namespace Framework.Weapons.Weapon_Factories

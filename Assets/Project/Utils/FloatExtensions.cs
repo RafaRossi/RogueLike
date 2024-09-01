@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Project.Utils
 {
-    public static class Extensions
+    public static class FloatExtensions
     {
         public static float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
         {

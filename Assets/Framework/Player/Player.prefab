@@ -313,6 +313,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2761240716605353248}
+  - component: {fileID: 6935264617506408839}
   - component: {fileID: 5794795730279106873}
   - component: {fileID: 4031057885854720371}
   - component: {fileID: 3015815539849440586}
@@ -344,6 +345,19 @@ Transform:
   - {fileID: 24161935605532340}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6935264617506408839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868016263610771482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0305edf1c2fd9c4ab42e8da30d365a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <PlayerMovement>k__BackingField: {fileID: 4031057885854720371}
 --- !u!114 &5794795730279106873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,7 +378,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 4031057885854720371}
           m_TargetAssemblyTypeName: CharacterMovement, Assembly-CSharp
-          m_MethodName: Move
+          m_MethodName: MoveInput
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -413,7 +427,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 4031057885854720371}
           m_TargetAssemblyTypeName: CharacterMovement, Assembly-CSharp
-          m_MethodName: Rotate
+          m_MethodName: RotateInput
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -482,7 +496,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8911963977160840453
 GameObject:
   m_ObjectHideFlags: 0

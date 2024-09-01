@@ -1,4 +1,5 @@
 using Framework.Weapons.Scripts;
+using Framework.Weapons.Weapon_Assets.Projectile_Launcher;
 using UnityEngine;
 
 namespace Framework.Weapons.Weapon_Strategies.Simple_Spawn_Bullet_Strategy
@@ -9,10 +10,12 @@ namespace Framework.Weapons.Weapon_Strategies.Simple_Spawn_Bullet_Strategy
         [SerializeField] private Bullet bulletPrefab;
         [SerializeField] private Vector3 spawnBulletOffset;
 
-        public override void UseWeapon(Transform origin, IWeapon weapon)
+        public override void UseWeapon(IWeapon weapon)
         {
-            var bullet = Instantiate(bulletPrefab, origin.position + spawnBulletOffset, origin.rotation);
-            bullet.Shoot(origin, weapon);
+            var projectileLauncher = weapon.GetWeapon<ProjectileLauncher>();
+            
+            var bullet = Instantiate(bulletPrefab, projectileLauncher.BulletSpawnPoint.position + spawnBulletOffset, projectileLauncher.BulletSpawnPoint.rotation);
+            bullet.Shoot(projectileLauncher.transform, bullet.transform.forward);
         }
     }
 }

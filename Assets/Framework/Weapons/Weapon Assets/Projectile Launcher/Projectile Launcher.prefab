@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33386a7c72d1b444694a4cd3f0375d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpawnPoint: {fileID: 3524898355868939527}
+  <BulletSpawnPoint>k__BackingField: {fileID: 3524898355868939527}
   attackStatModifier:
     value: 10
     type: 100

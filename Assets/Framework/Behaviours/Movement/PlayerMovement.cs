@@ -22,6 +22,7 @@ namespace Framework.Behaviours.Movement
         private Camera _camera;
 
         private Vector3 _movementDirection = Vector3.zero;
+        private Vector3 _desiredRotation = Vector3.zero;
 
         private void Awake()
         {
@@ -31,35 +32,41 @@ namespace Framework.Behaviours.Movement
             _dashDuration = playerStatsComponent.DashDuration;
         }
 
-        public void Move(Vector3 movementDirection)
+        public void MoveInput(Vector3 movementDirection)
         {
             if(characterFlags.TryGetFlag(Flag.IsDashing)) return;
         
             _movementDirection = movementDirection;
         
             _movementDirection = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * _movementDirection;
-        
+        }
+
+        public void Move()
+        {
             characterController.Move(_movementDirection.normalized * (_moveSpeed.Value * Time.deltaTime));
         }
         
-        public void Rotate(Vector3 facingDirection)
+        public void RotateInput(Vector3 facingDirection)
         {
-            var targetPosition = TryGetTarget(facingDirection);
+            _desiredRotation = GetDesiredRotation(facingDirection);
+        }
 
-            transform.LookAt(new Vector3(targetPosition.x, transform.position.y, targetPosition.z));
+        public void Rotate()
+        {
+            transform.LookAt(new Vector3(_desiredRotation.x, transform.position.y, _desiredRotation.z));
         }
         
-        private Vector3 TryGetTarget(Vector3 mousePosition)
+        private Vector3 GetDesiredRotation(Vector3 mousePosition)
         {
             var ray = _camera.ScreenPointToRay(mousePosition);
             
-            if (Physics.Raycast(ray, out var hit))
+            /*if (Physics.Raycast(ray, out var hit))
             {
                 if (hit.collider.gameObject.GetComponent<TargetComponent>() != null)
                 {
                     return hit.collider.transform.position;
                 }
-            }
+            }*/
 
             var plane = new Plane(Vector3.up, transform.position);
 
@@ -67,8 +74,6 @@ namespace Framework.Behaviours.Movement
             return ray.GetPoint(distance);
         }
         
-        
-    
         public void Dash()
         {
             StartCoroutine(PerformDash());

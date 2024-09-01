@@ -8,7 +8,8 @@ namespace Framework.Weapons.Weapon_Assets.Projectile_Launcher
 {
     public class ProjectileLauncher : Weapon
     {
-        [SerializeField] private Transform bulletSpawnPoint;
+        [field:SerializeField] public Transform BulletSpawnPoint { get; private set; }
+        
         public StatModifier attackStatModifier;
 
         private Stat _attackDamage;
@@ -16,40 +17,21 @@ namespace Framework.Weapons.Weapon_Assets.Projectile_Launcher
 
         private Camera _camera;
 
+        private WeaponHolder _weaponHolder;
+
         private void Awake()
         {
             _camera ??= Camera.main;
         }
 
-        public override void UseWeapon()
+        public override void UseWeapon(WeaponHolder weaponHolder)
         {
-            //bulletSpawnPoint.rotation =  Quaternion.Euler(new Vector3(0f,180 - GetAimDirection(),0f));
-            WeaponStrategy.UseWeapon(bulletSpawnPoint, this);
-        }
-
-        private float GetAimDirection()
-        {
-            var positionOnScreen = _camera.WorldToViewportPoint (transform.position);
-            var mouseOnScreen = (Vector2)_camera.ScreenToViewportPoint(TryGetTarget());
-
-            return Extensions.AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen) + _camera.transform.eulerAngles.y;
-        }
-
-        private Vector2 TryGetTarget()
-        {
-            //var mousePosition = (Vector2)_camera.ScreenToViewportPoint(Input.mousePosition);
-            var mousePosition = Input.mousePosition;
-
-            if (!Physics.SphereCast(_camera.ScreenPointToRay(Input.mousePosition), 2f, out var hitInfo))
-            {
-                return mousePosition;
-            }
+            _weaponHolder = weaponHolder;
             
-            if (!hitInfo.collider.TryGetComponent<TargetComponent>(out var target)) return mousePosition;
-            return target.CanBeTarget ? _camera.WorldToScreenPoint(target.transform.position) : mousePosition;
+            WeaponStrategy.UseWeapon(this);
         }
 
-        public class ProjectileLauncherBuilder : Builder
+        public class ProjectileLauncherBuilder : Builder<ProjectileLauncher>
         {
             
         }

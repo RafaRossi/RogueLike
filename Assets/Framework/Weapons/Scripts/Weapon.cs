@@ -7,52 +7,59 @@ namespace Framework.Weapons.Scripts
     public abstract class Weapon : MonoBehaviour, IWeapon
     {
         public string WeaponName { get; private set; }
-        public WeaponStrategy WeaponStrategy { get; private set; }
+        protected WeaponStrategy WeaponStrategy { get; private set; }
 
-        public virtual void UseWeapon()
+        public virtual void UseWeapon(WeaponHolder weaponHolder)
         {
-            WeaponStrategy.UseWeapon(transform, this);
+            WeaponStrategy.UseWeapon(weaponHolder.GetCurrentWeapon());
         }
 
-        public abstract class Builder
+        public T GetWeapon<T>() where T: Weapon
+        {
+            return this as T;
+        }
+
+        public abstract class Builder<T> where T : Weapon
         {
             private GameObject _weaponPrefab;
             
             private string _weaponName;
             private WeaponStrategy _weaponStrategy;
 
-            public Builder WithName(string weaponName)
+            public Builder<T> WithName(string weaponName)
             {
                 _weaponName = weaponName;
                 return this;
             }
 
-            public Builder WithWeaponPrefab(GameObject weaponPrefab)
+            public Builder<T> WithWeaponPrefab(GameObject weaponPrefab)
             {
                 _weaponPrefab = weaponPrefab;
                 return this;
             }
 
-            public Builder WithWeaponStrategy(WeaponStrategy weaponStrategy)
+            public Builder<T> WithWeaponStrategy(WeaponStrategy weaponStrategy)
             {
                 _weaponStrategy = weaponStrategy;
                 return this;
             }
 
-            public Weapon Build(Transform origin)
+            public virtual T Build(Transform origin)
             {
                 var weapon = _weaponPrefab == null ? new GameObject(_weaponName).AddComponent<Weapon>() : Instantiate(_weaponPrefab, origin.position, Quaternion.identity, origin).GetComponent<Weapon>();
                 
                 weapon.WeaponName = _weaponName;
                 weapon.WeaponStrategy = _weaponStrategy;
 
-                return weapon;
+                return weapon as T;
             }
         }
     }
     
     public interface IWeapon
     {
-        void UseWeapon();
+        void UseWeapon(WeaponHolder weaponHolder);
+
+        T GetWeapon<T>() where T : Weapon;
     }
 }
