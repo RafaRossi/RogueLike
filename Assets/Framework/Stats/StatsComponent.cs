@@ -1,36 +1,45 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Framework.Stats;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Framework.Stats
 {
     public class StatsComponent : MonoBehaviour
     {
-        /*private readonly Dictionary<StatID, Stat> _currentStats = new Dictionary<StatID, Stat>();
+        [SerializeField] private StatsData statsData;
+        public StatsAttributes StatsAttributes { get; private set; }
 
-        [SerializeField] private List<Stat> stats = new List<Stat>();
-        
-        public void AddStat(Stat stat)
+        private void Awake()
         {
-            _currentStats.TryAdd(stat.StatID, stat);
+            StatsAttributes = new StatsAttributes(statsData);
         }
+    }
 
-        public bool RemoveStat(Stat stat)
-        {
-            return _currentStats.Remove(stat.StatID);
-        }
-
-        public bool TryGetStat(StatID statID, out Stat stat)
-        {
-            return _currentStats.TryGetValue(statID, out stat);
-        }*/
-        [field:SerializeField] public Stat Health { get; private set; }
-        
+    [Serializable]
+    public class StatsAttributes
+    {
+        [field:SerializeField] public Stat MaxHealth { get; private set; }
         [field:SerializeField] public Stat MoveSpeed { get; private set; }
         
         [field:SerializeField] public Stat AttackDamage { get; private set; }
         [field:SerializeField] public Stat AttackSpeed { get; private set; }
+        [field:SerializeField] public Stat AttackSpecial { get; private set; }
         
         [field:SerializeField] public Stat Defense { get; private set; }
+        
+        public StatsAttributes(StatsData statsData)
+        {
+            MaxHealth = new Stat(statsData.StatsAttributes.MaxHealth);
+            MoveSpeed = new Stat(statsData.StatsAttributes.MoveSpeed);
+            
+            AttackDamage = new Stat(statsData.StatsAttributes.AttackDamage);
+            AttackSpeed = new Stat(statsData.StatsAttributes.AttackSpeed);
+            AttackSpecial = new Stat(statsData.StatsAttributes.AttackSpecial);
+            
+            Defense = new Stat(statsData.StatsAttributes.Defense);
+        }
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using Framework.Behaviours.Target;
 using Framework.Entities;
 using Framework.Stats;
@@ -11,39 +11,28 @@ namespace Framework.Behaviours.Movement
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private CharacterController characterController;
-        [SerializeField] private CharacterFlags characterFlags;
         [SerializeField] private PlayerStatsComponent playerStatsComponent;
-        
-        [SerializeField] private StatModifier characterDashSpeed;
-
-        private Stat _moveSpeed;
-        private Stat _dashDuration;
         
         private Camera _camera;
 
-        private Vector3 _movementDirection = Vector3.zero;
+        public Vector3 MovementDirection { get; private set; } = Vector3.zero;
         private Vector3 _desiredRotation = Vector3.zero;
 
         private void Awake()
         {
             _camera ??= Camera.main;
-
-            _moveSpeed = playerStatsComponent.MoveSpeed;
-            _dashDuration = playerStatsComponent.DashDuration;
         }
 
         public void MoveInput(Vector3 movementDirection)
         {
-            if(characterFlags.TryGetFlag(Flag.IsDashing)) return;
+            MovementDirection = movementDirection;
         
-            _movementDirection = movementDirection;
-        
-            _movementDirection = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * _movementDirection;
+            MovementDirection = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * MovementDirection;
         }
 
         public void Move()
         {
-            characterController.Move(_movementDirection.normalized * (_moveSpeed.Value * Time.deltaTime));
+            characterController.Move(MovementDirection.normalized * (playerStatsComponent.StatsAttributes.MoveSpeed.Value * Time.fixedDeltaTime));
         }
         
         public void RotateInput(Vector3 facingDirection)
@@ -73,35 +62,6 @@ namespace Framework.Behaviours.Movement
             plane.Raycast(ray, out var distance);
             return ray.GetPoint(distance);
         }
-        
-        public void Dash()
-        {
-            StartCoroutine(PerformDash());
-            return;
-
-            IEnumerator PerformDash()
-            {
-                if (characterFlags.TryGetFlag(Flag.IsDashing)) yield break;
-
-                characterFlags.AddFlag(Flag.IsDashing);
-        
-                var startTime = Time.time;
-                
-                _moveSpeed.AddModifier(characterDashSpeed);
-
-                while (Time.time < startTime + _dashDuration.Value)
-                {
-                    characterController.Move(_movementDirection.normalized * (_moveSpeed.Value * Time.deltaTime));
-                
-                    yield return null;
-                }
-
-                _moveSpeed.RemoveModifier(characterDashSpeed);
-                characterFlags.RemoveFlag(Flag.IsDashing);
-            }
-        }
-
-        public Stat GetCharacterMoveSpeed() => _moveSpeed;
 
     }
 }

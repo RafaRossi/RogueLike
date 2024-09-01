@@ -1371,22 +1371,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3015815539849440586, guid: 799efbe070bce4247836f82072ce4987, type: 3}
-      propertyPath: m_Center.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4031057885854720371, guid: 799efbe070bce4247836f82072ce4987, type: 3}
-      propertyPath: rotationOffset
-      value: 270
-      objectReference: {fileID: 0}
-    - target: {fileID: 5057102546463067015, guid: 799efbe070bce4247836f82072ce4987, type: 3}
-      propertyPath: initialWeaponFactory
-      value: 
-      objectReference: {fileID: 11400000, guid: 3bd1803c4dcf7ff45a30d08881b45f14, type: 2}
-    - target: {fileID: 5794795730279106873, guid: 799efbe070bce4247836f82072ce4987, type: 3}
-      propertyPath: tes
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7868016263610771482, guid: 799efbe070bce4247836f82072ce4987, type: 3}
       propertyPath: m_Name
       value: Player
