@@ -1,20 +1,29 @@
 using System;
+using Framework.Abilities;
 using Framework.Behaviours.Movement;
 using Framework.State_Machine;
+using Framework.Stats;
 using Project.Utils;
 using UnityEngine;
 
 namespace Framework.Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IEntity
     {
         private readonly StateMachine _stateMachine = new StateMachine();
+        
+        [field: SerializeField] public CharacterData CharacterData { get; private set; }
 
+        [field: SerializeField] public AbilityController AbilityController { get; private set; }
+        [field: SerializeField] public StatsComponent StatsComponent { get; private set; }
         [field:SerializeField] public PlayerMovement PlayerMovement { get; private set; }
         [field:SerializeField] public PlayerDash PlayerDash { get; private set; }
 
         private void Awake()
         {
+            StatsComponent.Initialize(CharacterData.CharacterStats);
+            AbilityController.InitializeAbilities(CharacterData.CharacterAbilities);
+            
             var locomotionState = new PlayerLocomotionState(this);
             var dashState = new PlayerDashState(this);
             
@@ -77,7 +86,6 @@ namespace Framework.Player
         public override void OnEnter()
         {
             base.OnEnter();
-            Debug.Log("Enter State Locomotion");
         }
 
         public PlayerLocomotionState(PlayerController playerController) : base(playerController)
@@ -90,7 +98,6 @@ namespace Framework.Player
         public override void OnEnter()
         {
             base.OnEnter();
-            Debug.Log("Enter State Dash");
         }
         
         public PlayerDashState(PlayerController playerController) : base(playerController)

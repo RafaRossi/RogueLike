@@ -9,10 +9,9 @@ namespace Framework.Stats
 {
     public class StatsComponent : MonoBehaviour
     {
-        [SerializeField] private StatsData statsData;
         public StatsAttributes StatsAttributes { get; private set; }
 
-        private void Awake()
+        public void Initialize(StatsData statsData)
         {
             StatsAttributes = new StatsAttributes(statsData);
         }
