@@ -38,7 +38,8 @@ namespace Framework.Health_System
 
         public void Heal(Heal heal)
         {
-            currentHealth.BaseValue = Mathf.Clamp(currentHealth.Value + heal.healAmount, 0, maxHealth.Value);
+            SetCurrentHealth(Mathf.Clamp(currentHealth.Value + heal.healAmount, 0, maxHealth.Value));
+            
             onHeal?.Invoke();
         }
     }

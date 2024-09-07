@@ -77,7 +77,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 24161935605532340}
-  - component: {fileID: 9167799934457285308}
   m_Layer: 0
   m_Name: Stats
   m_TagString: Untagged
@@ -100,18 +99,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2761240716605353248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9167799934457285308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2981239499916558338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15234973ad067aa43bd9785fd76c2ab2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3151972581241672051
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialWeaponFactory: {fileID: 11400000, guid: 3bd1803c4dcf7ff45a30d08881b45f14, type: 2}
+  <EntityController>k__BackingField: {fileID: 0}
 --- !u!1 &4433436943929707620
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8986906049170577543}
   - component: {fileID: 6047850232206852810}
+  - component: {fileID: 1616421670156752977}
   m_Layer: 0
   m_Name: Renderer
   m_TagString: Untagged
@@ -286,6 +275,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!95 &1616421670156752977
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7717845302073028438}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0f66728b1eedc3e4a8efa78ad97dd00f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7868016263610771482
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +310,9 @@ GameObject:
   - component: {fileID: 4031057885854720371}
   - component: {fileID: 5147162202295069610}
   - component: {fileID: 1336528855997082123}
+  - component: {fileID: 6974315680634136064}
+  - component: {fileID: 2747698886844779566}
+  - component: {fileID: 3131908825671622622}
   - component: {fileID: 3015815539849440586}
   m_Layer: 0
   m_Name: Player
@@ -342,8 +355,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CharacterData>k__BackingField: {fileID: 11400000, guid: d7e5fa64b7582394ebe63524ee9d4704, type: 2}
+  <AnimationComponent>k__BackingField: {fileID: 3131908825671622622}
+  <StatsComponent>k__BackingField: {fileID: 6974315680634136064}
   <AbilityController>k__BackingField: {fileID: 1336528855997082123}
-  <StatsComponent>k__BackingField: {fileID: 9167799934457285308}
+  <StateMachineComponent>k__BackingField: {fileID: 2747698886844779566}
   <PlayerMovement>k__BackingField: {fileID: 4031057885854720371}
   <PlayerDash>k__BackingField: {fileID: 5147162202295069610}
 --- !u!114 &5794795730279106873
@@ -452,8 +467,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69077304c089b4a4bbc028ff86f11b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 6935264617506408839}
   characterController: {fileID: 3015815539849440586}
-  playerStatsComponent: {fileID: 9167799934457285308}
 --- !u!114 &5147162202295069610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466,10 +481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4f20273f4c46aab6959d592245b272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMovement: {fileID: 4031057885854720371}
-  playerStatsComponent: {fileID: 9167799934457285308}
+  playerController: {fileID: 6935264617506408839}
   characterDashSpeed:
-    value: 20
+    value: 50
     type: 100
     priority: 0
   dashDuration: 0.2
@@ -485,6 +499,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d724151775f4f69bb73316fb2415bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6974315680634136064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868016263610771482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15234973ad067aa43bd9785fd76c2ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2747698886844779566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868016263610771482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1df4fbf0d38cae4eac27f983eb8fc10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3131908825671622622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868016263610771482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9b2a98c9c976584892cd5c1bca58c1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animatorController: {fileID: 1616421670156752977}
 --- !u!143 &3015815539849440586
 CharacterController:
   m_ObjectHideFlags: 0
@@ -557,7 +608,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth:
-    <StatID>k__BackingField: {fileID: 0}
+    <StatID>k__BackingField: {fileID: 11400000, guid: 185b9691f4126a84bb4a93c7f44e48e3, type: 2}
     <BaseValue>k__BackingField: 0
   currentHealth:
     <StatID>k__BackingField: {fileID: 0}

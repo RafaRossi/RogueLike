@@ -1,6 +1,8 @@
 using System;
 using Framework.Behaviours.Target;
 using Framework.Entities;
+using Framework.Player;
+using Framework.State_Machine;
 using Framework.Stats;
 using Project.Utils;
 using UnityEngine;
@@ -10,8 +12,8 @@ namespace Framework.Behaviours.Movement
 {
     public class PlayerMovement : MonoBehaviour
     {
+        [SerializeField] private PlayerController playerController;
         [SerializeField] private CharacterController characterController;
-        [SerializeField] private PlayerStatsComponent playerStatsComponent;
         
         private Camera _camera;
 
@@ -32,7 +34,7 @@ namespace Framework.Behaviours.Movement
 
         public void Move()
         {
-            characterController.Move(MovementDirection.normalized * (playerStatsComponent.StatsAttributes.MoveSpeed.Value * Time.fixedDeltaTime));
+            characterController.Move(MovementDirection.normalized * (playerController.StatsComponent.StatsAttributes.MoveSpeed.Value * Time.fixedDeltaTime));
         }
         
         public void RotateInput(Vector3 facingDirection)
@@ -63,5 +65,26 @@ namespace Framework.Behaviours.Movement
             return ray.GetPoint(distance);
         }
 
+    }
+    
+    
+    public class PlayerLocomotionState : PlayerStateMachine
+    {
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            
+            playerController.PlayerMovement.Move();
+            playerController.PlayerMovement.Rotate();
+        }
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+        }
+
+        public PlayerLocomotionState(PlayerController playerController) : base(playerController)
+        {
+        }
     }
 }

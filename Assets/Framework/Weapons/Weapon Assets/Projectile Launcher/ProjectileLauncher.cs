@@ -10,27 +10,6 @@ namespace Framework.Weapons.Weapon_Assets.Projectile_Launcher
     {
         [field:SerializeField] public Transform BulletSpawnPoint { get; private set; }
         
-        public StatModifier attackStatModifier;
-
-        private Stat _attackDamage;
-        private Stat _attackSpeed;
-
-        private Camera _camera;
-
-        private WeaponHolder _weaponHolder;
-
-        private void Awake()
-        {
-            _camera ??= Camera.main;
-        }
-
-        public override void UseWeapon(WeaponHolder weaponHolder)
-        {
-            _weaponHolder = weaponHolder;
-            
-            WeaponStrategy.UseWeapon(this);
-        }
-
         public class ProjectileLauncherBuilder : Builder<ProjectileLauncher>
         {
             

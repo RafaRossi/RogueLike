@@ -9,15 +9,22 @@ namespace Framework.Weapons.Scripts
     {
         public string WeaponName { get; private set; }
         protected WeaponStrategy WeaponStrategy { get; private set; }
+        
+        protected WeaponHolder WeaponHolder { get; private set; }
 
-        public virtual void UseWeapon(WeaponHolder weaponHolder)
+        public virtual void UseWeapon()
         {
-            WeaponStrategy.UseWeapon(weaponHolder.GetCurrentWeapon());
+            WeaponStrategy.UseWeapon(this);
         }
 
         public T GetWeapon<T>() where T: Weapon
         {
             return this as T;
+        }
+
+        public WeaponHolder GetWeaponHolder()
+        {
+            return WeaponHolder;
         }
 
         public abstract class Builder<T> where T : Weapon
@@ -26,6 +33,7 @@ namespace Framework.Weapons.Scripts
             
             private string _weaponName;
             private WeaponStrategy _weaponStrategy;
+            private WeaponHolder _weaponHolder;
 
             public Builder<T> WithName(string weaponName)
             {
@@ -45,12 +53,20 @@ namespace Framework.Weapons.Scripts
                 return this;
             }
 
+            public Builder<T> WithWeaponHolder(WeaponHolder weaponHolder)
+            {
+                _weaponHolder = weaponHolder;
+                return this;
+            }
+
             public virtual T Build(Transform origin)
             {
                 var weapon = _weaponPrefab == null ? new GameObject(_weaponName).AddComponent<Weapon>() : Instantiate(_weaponPrefab, origin.position, Quaternion.identity, origin).GetComponent<Weapon>();
                 
                 weapon.WeaponName = _weaponName;
                 weapon.WeaponStrategy = _weaponStrategy;
+                
+                _weaponStrategy.InitializeWeapon(weapon);
 
                 return weapon as T;
             }
@@ -59,8 +75,10 @@ namespace Framework.Weapons.Scripts
     
     public interface IWeapon
     {
-        void UseWeapon(WeaponHolder weaponHolder);
+        void UseWeapon();
 
         T GetWeapon<T>() where T : Weapon;
+
+        WeaponHolder GetWeaponHolder();
     }
 }

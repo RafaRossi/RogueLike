@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Framework.Player;
+using Framework.State_Machine;
 using Framework.Stats;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Framework.Behaviours.Movement
 {
     public class PlayerDash : MonoBehaviour
     {
-        [SerializeField] private PlayerMovement playerMovement;
-        [SerializeField] private PlayerStatsComponent playerStatsComponent;
+        [SerializeField] private PlayerController playerController;
         
         [SerializeField] private StatModifier characterDashSpeed;
         [SerializeField] private float dashDuration;
@@ -15,6 +18,8 @@ namespace Framework.Behaviours.Movement
         public bool IsDashing { get; private set; }
 
         private bool _canDash = true;
+
+        private float _startDashTime;
         
         public void SetCanDash(bool value) => _canDash = value;
         
@@ -22,28 +27,58 @@ namespace Framework.Behaviours.Movement
         {
             if (_canDash && !IsDashing)
             {
-                StartCoroutine(PerformDash());
+                IsDashing = true;
+                _startDashTime = Time.time;
+                
+                playerController.StatsComponent.StatsAttributes.MoveSpeed.AddModifier(characterDashSpeed);
             }
         }
-        
-        private IEnumerator PerformDash()
+
+        private void FixedUpdate()
         {
-            IsDashing = true;
-            
+            if(!IsDashing) return;
+
+            if (Time.time < _startDashTime + dashDuration)
+            {
+                playerController.PlayerMovement.Move();
+            }
+            else
+            {
+                playerController.StatsComponent.StatsAttributes.MoveSpeed.RemoveModifier(characterDashSpeed);
+                IsDashing = false;
+            }
+        }
+
+        /*private void PerformDash()
+        {
+
             var startTime = Time.time;
             
-            playerStatsComponent.StatsAttributes.MoveSpeed.AddModifier(characterDashSpeed);
+            playerController.StatsComponent.StatsAttributes.MoveSpeed.AddModifier(characterDashSpeed);
 
-            while (Time.time < startTime + dashDuration/*playerStatsComponent.DashDuration.Value*/)
+            while (Time.time < startTime + dashDuration/*playerStatsComponent.DashDuration.Value)
             {
-                playerMovement.Move();
+                playerController.PlayerMovement.Move();
                 
                 yield return null;
             }
             
-            playerStatsComponent.StatsAttributes.MoveSpeed.RemoveModifier(characterDashSpeed);
+            playerController.StatsComponent.StatsAttributes.MoveSpeed.RemoveModifier(characterDashSpeed);
 
             IsDashing = false;
+        }*/
+    }
+    
+    
+    public class PlayerDashState : PlayerStateMachine
+    {
+        public override void OnEnter()
+        {
+            base.OnEnter();
+        }
+        
+        public PlayerDashState(PlayerController playerController) : base(playerController)
+        {
         }
     }
 }
