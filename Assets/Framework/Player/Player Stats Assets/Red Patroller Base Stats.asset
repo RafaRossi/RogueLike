@@ -13,21 +13,18 @@ MonoBehaviour:
   m_Name: Red Patroller Base Stats
   m_EditorClassIdentifier: 
   <StatsAttributes>k__BackingField:
-    <MaxHealth>k__BackingField:
-      <StatID>k__BackingField: {fileID: 11400000, guid: 185b9691f4126a84bb4a93c7f44e48e3, type: 2}
-      <BaseValue>k__BackingField: 100
-    <MoveSpeed>k__BackingField:
-      <StatID>k__BackingField: {fileID: 11400000, guid: 9540f948c2e45734685dd6058866f8dc, type: 2}
-      <BaseValue>k__BackingField: 10
-    <AttackDamage>k__BackingField:
-      <StatID>k__BackingField: {fileID: 11400000, guid: 2cec2aff0bb2b264ba938e07808ca34c, type: 2}
-      <BaseValue>k__BackingField: 10
-    <AttackSpeed>k__BackingField:
-      <StatID>k__BackingField: {fileID: 11400000, guid: f17501f4c132dad44b1b131c0c585176, type: 2}
-      <BaseValue>k__BackingField: 1
-    <AttackSpecial>k__BackingField:
-      <StatID>k__BackingField: {fileID: 11400000, guid: 7e95a2c8e09396549b047b10f48d9de7, type: 2}
-      <BaseValue>k__BackingField: 0
-    <Defense>k__BackingField:
-      <StatID>k__BackingField: {fileID: 11400000, guid: ec1ed7d0658091f42b08c522ddcb4897, type: 2}
+    <Stats>k__BackingField:
+    - <StatID>k__BackingField: 0
       <BaseValue>k__BackingField: 20
+    - <StatID>k__BackingField: 3
+      <BaseValue>k__BackingField: 1
+    - <StatID>k__BackingField: 5
+      <BaseValue>k__BackingField: 10
+    - <StatID>k__BackingField: 2
+      <BaseValue>k__BackingField: 10
+    - <StatID>k__BackingField: 4
+      <BaseValue>k__BackingField: 0
+    - <StatID>k__BackingField: 7
+      <BaseValue>k__BackingField: 100
+    - <StatID>k__BackingField: 8
+      <BaseValue>k__BackingField: 100

@@ -42,6 +42,11 @@ namespace Framework.Stats
             BaseValue = baseValue;
         }
 
+        public Stat(StatID statID) : this()
+        {
+            StatID = statID;
+        }
+
         public Stat(Stat stat) : this(stat.BaseValue)
         {
             StatID = stat.StatID;

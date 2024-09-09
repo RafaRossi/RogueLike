@@ -3,10 +3,9 @@ using UnityEngine;
 
 namespace Framework.Weapons.Weapon_Strategies.Basic_Sword_Strategy
 {
+    [CreateAssetMenu(fileName = "Basic Sword", menuName = "Weapon Strategy/Basic Sword Strategy")]
     public class BasicSwordStrategy : WeaponStrategy
     {
-        public AnimationClip[] attackClips;
-            
         public override void InitializeWeapon(IWeapon weapon)
         {
             

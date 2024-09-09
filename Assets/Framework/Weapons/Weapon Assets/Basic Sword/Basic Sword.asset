@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca51607bf9a38c240932b7c75c2856ad, type: 3}
-  m_Name: Attack Special
+  m_Script: {fileID: 11500000, guid: e5d0eaed98ab2594e9e09b83d6a6ce6f, type: 3}
+  m_Name: Basic Sword
   m_EditorClassIdentifier: 
-  <Icon>k__BackingField: {fileID: 0}
+  <WeaponPrefab>k__BackingField: {fileID: 0}
+  <WeaponStrategy>k__BackingField: {fileID: 0}
+  <WeaponFactory>k__BackingField: {fileID: 0}

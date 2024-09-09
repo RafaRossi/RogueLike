@@ -3,6 +3,7 @@ using Framework.Entities;
 using Framework.Stats;
 using Framework.Weapons.Weapon_Factories;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Framework.Weapons.Scripts
 {
@@ -10,15 +11,18 @@ namespace Framework.Weapons.Scripts
     {
         private IWeapon _currentWeapon;
 
-        [SerializeField] private WeaponFactory initialWeaponFactory;
+        [SerializeField] private WeaponAsset initialWeaponAsset;
 
         [field:SerializeField] public EntityController EntityController { get; private set; }
+
+        public UnityEvent<IWeapon> onEquipWeapon = new UnityEvent<IWeapon>();
+        public UnityEvent<IWeapon> onUnEquipWeapon = new UnityEvent<IWeapon>();
         
         private void Start()
         {
-            if (initialWeaponFactory != null)
+            if (initialWeaponAsset != null)
             {
-                InstantiateWeapon(initialWeaponFactory);
+                InstantiateWeapon(initialWeaponAsset);
             }
         }
 
@@ -27,9 +31,13 @@ namespace Framework.Weapons.Scripts
             _currentWeapon?.UseWeapon();
         }
 
-        private void InstantiateWeapon(WeaponFactory weaponFactory)
+        private void InstantiateWeapon(WeaponAsset weaponAsset)
         {
-            _currentWeapon = weaponFactory.CreateWeapon(transform);
+            if(_currentWeapon != null) onUnEquipWeapon?.Invoke(_currentWeapon);
+            
+            _currentWeapon = weaponAsset.CreateWeapon(transform);
+            
+            onEquipWeapon?.Invoke(_currentWeapon);
         }
 
         public IWeapon GetCurrentWeapon() => _currentWeapon;

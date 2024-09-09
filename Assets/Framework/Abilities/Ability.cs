@@ -16,7 +16,7 @@ namespace Framework.Abilities
         public abstract void Initialize();
         public abstract bool CanExecute();
         
-        public abstract class Builder<T> where T : PassiveAbility, new()
+        public abstract class Builder<T> where T : Ability, new()
         {
             protected AbilityController origin;
             

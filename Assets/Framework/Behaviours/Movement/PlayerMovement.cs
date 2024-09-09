@@ -13,12 +13,16 @@ namespace Framework.Behaviours.Movement
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private PlayerController playerController;
-        [SerializeField] private CharacterController characterController;
+        //[SerializeField] private CharacterController characterController;
+        [SerializeField] private Rigidbody characterRigidbody;
         
         private Camera _camera;
 
         public Vector3 MovementDirection { get; private set; } = Vector3.zero;
         private Vector3 _desiredRotation = Vector3.zero;
+        
+        private float MaxSpeed => playerController.StatsComponent.GetStat(StatID.MoveSpeed).Value;
+        [SerializeField] private float acceleration = 10f;
 
         private void Awake()
         {
@@ -34,7 +38,21 @@ namespace Framework.Behaviours.Movement
 
         public void Move()
         {
-            characterController.Move(MovementDirection.normalized * (playerController.StatsComponent.StatsAttributes.MoveSpeed.Value * Time.fixedDeltaTime));
+            //characterController.Move(MovementDirection.normalized * (playerController.StatsComponent.StatsAttributes.MoveSpeed.Value * Time.fixedDeltaTime));
+
+            if (MovementDirection != Vector3.zero)
+            {
+                characterRigidbody.AddForce(MovementDirection * acceleration, ForceMode.Force);
+
+                if (characterRigidbody.velocity.magnitude > MaxSpeed)
+                {
+                    characterRigidbody.velocity = characterRigidbody.velocity.normalized * MaxSpeed;
+                }
+            }
+            else
+            {
+                characterRigidbody.AddForce(characterRigidbody.velocity * -acceleration, ForceMode.Force);
+            }
         }
         
         public void RotateInput(Vector3 facingDirection)

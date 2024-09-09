@@ -1,18 +1,24 @@
-/*public enum StatID
+namespace Framework.Stats
 {
-    MoveSpeed,
+    public enum StatID
+    {
+        MoveSpeed,
+        CurrentSpeed,
         
-    DashDuration,
+        AttackDamage,
+        AttackSpeed,
+        AttackSpecial,
         
-    AttackDamage,
-    AttackSpeed,
+        Defense,
         
-    Defense,
-        
-    ProjectileCount,
-}*/
+        ProjectileCount,
+    
+        MaxHealth,
+        CurrentHealth
+    }
+}
 
-using UnityEngine;
+/*using UnityEngine;
 
 namespace Framework.Stats
 {
@@ -21,4 +27,4 @@ namespace Framework.Stats
     {
         [field:SerializeField] public Sprite Icon { get; private set; } 
     }
-}
+}*/

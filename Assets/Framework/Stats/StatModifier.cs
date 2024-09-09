@@ -17,16 +17,20 @@ namespace Framework.Stats
         public int priority;
         public object source;
 
-        public StatModifier(float value, StatModifierType type, int priority, object source)
+        public StatID statID;
+
+        public StatModifier(StatID statID, float value, StatModifierType type, int priority, object source)
         {
             this.value = value;
             this.type = type;
             this.priority = priority;
             this.source = source;
+
+            this.statID = statID;
         }
         
-        public StatModifier(float value, StatModifierType type) : this (value, type, (int)type, null) { }
-        public StatModifier(float value, StatModifierType type, int order) : this (value, type, (int)type, null) { }
-        public StatModifier(float value, StatModifierType type, object source) : this (value, type, (int)type, source) { }
+        public StatModifier(StatID statID, float value, StatModifierType type) : this (statID, value, type, (int)type, null) { }
+        public StatModifier(StatID statID, float value, StatModifierType type, int order) : this (statID, value, type, (int)type, null) { }
+        public StatModifier(StatID statID, float value, StatModifierType type, object source) : this (statID, value, type, (int)type, source) { }
     }
 }

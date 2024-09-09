@@ -14,8 +14,8 @@ namespace Framework.Abilities
     
     public class DummyPassive : PassiveAbility
     {
-        private StatModifier _attackDamage = new StatModifier(50, StatModifierType.Flat);
-        private StatModifier _attackSpecial = new StatModifier(50, StatModifierType.Flat);
+        private readonly StatModifier _attackDamage = new StatModifier(StatID.AttackDamage,50, StatModifierType.Flat);
+        private readonly StatModifier _attackSpecial = new StatModifier(StatID.AttackSpecial, 50, StatModifierType.Flat);
 
         private StatsComponent _statsComponent;
         
@@ -28,14 +28,14 @@ namespace Framework.Abilities
 
         public override void Execute()
         {
-            _statsComponent.StatsAttributes.AttackDamage.AddModifier(_attackDamage);
-            _statsComponent.StatsAttributes.AttackSpecial.AddModifier(_attackSpecial);
+            _statsComponent.GetStat(StatID.AttackDamage)?.AddModifier(_attackDamage);
+            _statsComponent.GetStat(StatID.AttackSpecial)?.AddModifier(_attackSpecial);
         }
 
         public override void Cancel()
         {
-            _statsComponent.StatsAttributes.AttackDamage.RemoveModifier(_attackDamage);
-            _statsComponent.StatsAttributes.AttackSpecial.RemoveModifier(_attackSpecial);
+            _statsComponent.GetStat(StatID.AttackDamage)?.RemoveModifier(_attackDamage);
+            _statsComponent.GetStat(StatID.AttackSpecial)?.RemoveModifier(_attackSpecial);
         }
 
         public override bool CanExecute()
