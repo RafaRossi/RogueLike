@@ -1,23 +1,45 @@
+using System;
 using System.Collections.Generic;
 using Framework.Stats;
-using Framework.Weapons.Weapon_Factories;
-using Framework.Weapons.Weapon_Strategies;
 using UnityEngine;
 
-namespace Framework.Weapons.Scripts
+public interface IWeaponData
 {
-    [CreateAssetMenu(fileName = "Weapon Asset", menuName = "Weapon Data")]
-    public class WeaponAsset : ScriptableObject
-    {
-        [field: SerializeField] public GameObject WeaponPrefab { get; private set; }
-        [field: SerializeField] public WeaponStrategy WeaponStrategy { get; private set; }
-        [field: SerializeField] public WeaponFactory WeaponFactory { get; private set; }
-        
-        [field: SerializeField] public List<StatModifier> StatModifiers { get; private set; }
+    
+}
 
-        public IWeapon CreateWeapon(Transform origin)
-        {
-            return WeaponFactory.CreateWeapon(origin, this);
-        }
-    }
+public interface IRangedWeapon
+{
+    
+}
+
+public interface IMeleeWeapon
+{
+    
+}
+
+public class MightySword : IWeaponData, IMeleeWeapon
+{
+    
+}
+
+public class StatScaling
+{
+    public Stat stat;
+    
+}
+
+[Serializable]
+public class TestData : IWeaponData
+{
+    public string ahhhhhh;
+}
+
+[CreateAssetMenu(menuName = "Weapons/Weapon Asset", fileName = "Weapon Asset")]
+public class WeaponAsset : ScriptableObject
+{
+    public GameObject weaponPrefab;
+    [SerializeReference] public IWeaponData weaponData;
+
+    [ContextMenu(nameof(TestData))] public void Test() => weaponData = new TestData();
 }
