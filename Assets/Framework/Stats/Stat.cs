@@ -7,7 +7,6 @@ namespace Framework.Stats
     [Serializable]
     public class Stat
     {
-        [field:SerializeField] public StatID StatID { get; private set; }
         [field:SerializeField] public float BaseValue { get; set; }
         private event Action OnStatChanged = delegate {  };
 
@@ -42,14 +41,8 @@ namespace Framework.Stats
             BaseValue = baseValue;
         }
 
-        public Stat(StatID statID) : this()
-        {
-            StatID = statID;
-        }
-
         public Stat(Stat stat) : this(stat.BaseValue)
         {
-            StatID = stat.StatID;
             statModifiers = stat.statModifiers ?? new List<StatModifier>();
         }
 
