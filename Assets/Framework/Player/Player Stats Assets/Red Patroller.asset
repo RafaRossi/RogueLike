@@ -12,6 +12,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d433f5762bd06c9429dc35beebb0b546, type: 3}
   m_Name: Red Patroller
   m_EditorClassIdentifier: 
-  <CharacterStats>k__BackingField: {fileID: 11400000, guid: 01eafd8a7019dfe4b97861cbc44e8291, type: 2}
+  <CharacterStats>k__BackingField:
+    <Stats>k__BackingField:
+    - rid: 7706638845661413383
+    - rid: 7706638845661413384
+    - rid: 7706638845661413385
+    - rid: 7706638845661413386
+    - rid: 7706638845661413387
+    - rid: 7706638845661413388
+    - rid: 7706638845661413389
   <CharacterAbilities>k__BackingField:
   - {fileID: 11400000, guid: 826e6b05f7b7c0945aa40c38cc5195fa, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 7706638845661413383
+      type: {class: DefenseStat, ns: Framework.Stats, asm: Assembly-CSharp}
+      data:
+        name: Defense
+        <BaseValue>k__BackingField: 0
+    - rid: 7706638845661413384
+      type: {class: HealthStat, ns: Framework.Stats, asm: Assembly-CSharp}
+      data:
+        name: Health
+        <BaseValue>k__BackingField: 0
+    - rid: 7706638845661413385
+      type: {class: AttackDamageStat, ns: Framework.Stats, asm: Assembly-CSharp}
+      data:
+        name: Attack Damage
+        <BaseValue>k__BackingField: 0
+    - rid: 7706638845661413386
+      type: {class: AttackSpecialStat, ns: Framework.Stats, asm: Assembly-CSharp}
+      data:
+        name: Special Attack
+        <BaseValue>k__BackingField: 0
+    - rid: 7706638845661413387
+      type: {class: AttackSpeedStat, ns: Framework.Stats, asm: Assembly-CSharp}
+      data:
+        name: Attack Speed
+        <BaseValue>k__BackingField: 0
+    - rid: 7706638845661413388
+      type: {class: DefenseSpecialStat, ns: Framework.Stats, asm: Assembly-CSharp}
+      data:
+        name: Special Defense
+        <BaseValue>k__BackingField: 0
+    - rid: 7706638845661413389
+      type: {class: MoveSpeedStat, ns: Framework.Stats, asm: Assembly-CSharp}
+      data:
+        name: Move Speed
+        <BaseValue>k__BackingField: 10

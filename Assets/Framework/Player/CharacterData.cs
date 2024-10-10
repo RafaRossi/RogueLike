@@ -8,7 +8,7 @@ namespace Framework.Player
     [CreateAssetMenu(fileName = "Character Data", menuName = "Character Data")]
     public class CharacterData : ScriptableObject
     {
-        [field:SerializeField] public StatsData CharacterStats { get; private set; }
+        [field:SerializeField] public StatsAttributes CharacterStats { get; private set; }
         [field:SerializeField] public List<AbilityStrategy> CharacterAbilities { get; private set; } = new List<AbilityStrategy>();
     }
 }

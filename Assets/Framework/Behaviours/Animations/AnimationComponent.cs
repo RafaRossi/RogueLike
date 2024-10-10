@@ -1,8 +1,20 @@
+using System;
+using Framework.Entities;
 using UnityEngine;
+
+public abstract class BaseComponent<T> : MonoBehaviour, IComponent where T : IComponent
+{
+    [field:SerializeField] public ComponentController ComponentController { get; set; }
+
+    protected virtual void Awake()
+    {
+        ComponentController.AddEntityOfType(typeof(T), this);
+    }
+}
 
 namespace Framework.Behaviours.Animations
 {
-    public class AnimationComponent : MonoBehaviour
+    public class AnimationComponent : BaseComponent<AnimationComponent>
     {
         [SerializeField] private Animator animatorController;
 

@@ -1,16 +1,20 @@
 using System;
+using System.Collections.Generic;
+using Framework.Behaviours.Animations;
 using Framework.Behaviours.Target;
 using Framework.Entities;
+using Framework.Inputs;
 using Framework.Player;
 using Framework.State_Machine;
 using Framework.Stats;
 using Project.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace Framework.Behaviours.Movement
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : BaseComponent<PlayerMovement>
     {
         [SerializeField] private PlayerController playerController;
         //[SerializeField] private CharacterController characterController;
@@ -19,19 +23,23 @@ namespace Framework.Behaviours.Movement
         private Camera _camera;
 
         public Vector3 MovementDirection { get; private set; } = Vector3.zero;
-        private Vector3 _desiredRotation = Vector3.zero;
+        public Vector3 FacingDirection { get; private set; } = Vector3.zero;
         
-        private float MaxSpeed => playerController.StatsComponent.GetStat(StatID.MoveSpeed).Value;
+        private float MaxSpeed => playerController.TryGetEntityOfType<StatsComponent>(out var stats) ? stats.GetStat<MoveSpeedStat>().Value : 20f;
+
         [SerializeField] private float acceleration = 10f;
 
-        private void Awake()
+        private Plane _plane = new Plane();
+
+        protected override void Awake()
         {
+            base.Awake();
             _camera ??= Camera.main;
         }
 
         public void MoveInput(Vector3 movementDirection)
         {
-            MovementDirection = movementDirection;
+            MovementDirection = movementDirection.normalized;
         
             MovementDirection = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * MovementDirection;
         }
@@ -40,46 +48,37 @@ namespace Framework.Behaviours.Movement
         {
             //characterController.Move(MovementDirection.normalized * (playerController.StatsComponent.StatsAttributes.MoveSpeed.Value * Time.fixedDeltaTime));
 
-            if (MovementDirection != Vector3.zero)
-            {
-                characterRigidbody.AddForce(MovementDirection * acceleration, ForceMode.Force);
-
-                if (characterRigidbody.velocity.magnitude > MaxSpeed)
-                {
-                    characterRigidbody.velocity = characterRigidbody.velocity.normalized * MaxSpeed;
-                }
-            }
-            else
-            {
-                characterRigidbody.AddForce(characterRigidbody.velocity * -acceleration, ForceMode.Force);
-            }
+            characterRigidbody.velocity = new Vector3(MovementDirection.x * MaxSpeed, characterRigidbody.velocity.y,
+                MovementDirection.z * MaxSpeed);
         }
         
         public void RotateInput(Vector3 facingDirection)
         {
-            _desiredRotation = GetDesiredRotation(facingDirection);
+            FacingDirection = GetDesiredRotation(facingDirection);
+
+            //FacingDirection = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * FacingDirection;
         }
 
-        public void Rotate()
+        public void RotateWithMouse()
         {
-            transform.LookAt(new Vector3(_desiredRotation.x, transform.position.y, _desiredRotation.z));
+            characterRigidbody.transform.LookAt(new Vector3(FacingDirection.x, characterRigidbody.position.y, FacingDirection.z));
+        }
+
+        public void RotateWithAxis()
+        {
+            if (MovementDirection != Vector3.zero)
+            {
+                var desiredRotation = Quaternion.LookRotation(MovementDirection, Vector3.up);
+                characterRigidbody.rotation = Quaternion.RotateTowards(characterRigidbody.rotation, desiredRotation, 500f * Time.deltaTime);
+            }
         }
         
         private Vector3 GetDesiredRotation(Vector3 mousePosition)
         {
             var ray = _camera.ScreenPointToRay(mousePosition);
-            
-            /*if (Physics.Raycast(ray, out var hit))
-            {
-                if (hit.collider.gameObject.GetComponent<TargetComponent>() != null)
-                {
-                    return hit.collider.transform.position;
-                }
-            }*/
+            _plane.SetNormalAndPosition(Vector3.up, characterRigidbody.position);
 
-            var plane = new Plane(Vector3.up, transform.position);
-
-            plane.Raycast(ray, out var distance);
+            _plane.Raycast(ray, out var distance);
             return ray.GetPoint(distance);
         }
 
@@ -88,21 +87,50 @@ namespace Framework.Behaviours.Movement
     
     public class PlayerLocomotionState : PlayerStateMachine
     {
+        private readonly PlayerMovement _playerMovement;
+        
         public override void FixedUpdate()
         {
             base.FixedUpdate();
             
-            playerController.PlayerMovement.Move();
-            playerController.PlayerMovement.Rotate();
-        }
-
-        public override void OnEnter()
-        {
-            base.OnEnter();
+            _playerMovement.Move();
+            _playerMovement.RotateWithAxis();
         }
 
         public PlayerLocomotionState(PlayerController playerController) : base(playerController)
         {
+            playerController.TryGetEntityOfType(out _playerMovement);
+            
+            var moveInputEvent = new UnityEvent<Vector3>();
+            moveInputEvent.AddListener(_playerMovement.MoveInput);
+
+            var dashInputEvent = new UnityEvent();
+            dashInputEvent.AddListener(playerController.GetEntityOfType<PlayerDash>().DashRequest);
+
+            var attackInputEvent = new UnityEvent<Vector3>();
+            attackInputEvent.AddListener(_playerMovement.RotateInput);
+
+            playerInput = new PlayerInput.Builder()
+                .WithAxisInputEvent(new AxisInputEvent(moveInputEvent))
+                .WithTriggerInputEvent(new TriggerInputEvent("Dash", dashInputEvent))
+                .Build();
+        }
+    }
+
+    public class PlayerAttackState : PlayerStateMachine
+    {
+        private readonly PlayerMovement _playerMovement;
+        
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            
+            _playerMovement.RotateWithMouse();
+        }
+
+        public PlayerAttackState(PlayerController playerController) : base(playerController)
+        {
+            playerController.TryGetEntityOfType(out _playerMovement);
         }
     }
 }

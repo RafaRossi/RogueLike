@@ -1,4 +1,5 @@
 using System;
+using Framework.Behaviours.Animations;
 using Framework.Entities;
 using Framework.Stats;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.Events;
 
 namespace Framework.Health_System
 {
-    public class HealthComponent : MonoBehaviour
+    public class HealthComponent : BaseComponent<HealthComponent>
     {
         [SerializeField] private Stat maxHealth;
         [SerializeField] private Stat currentHealth;

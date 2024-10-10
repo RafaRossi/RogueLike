@@ -5,8 +5,9 @@ using UnityEngine;
 namespace Framework.Stats
 {
     [Serializable]
-    public class Stat
+    public abstract class Stat
     {
+        [HideInInspector] public string name;
         [field:SerializeField] public float BaseValue { get; set; }
         private event Action OnStatChanged = delegate {  };
 

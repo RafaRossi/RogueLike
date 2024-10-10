@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Framework.Behaviours.Animations;
+using Framework.Inputs;
 using Framework.Player;
 using Framework.State_Machine;
 using Framework.Stats;
@@ -9,7 +11,7 @@ using UnityEngine.Serialization;
 
 namespace Framework.Behaviours.Movement
 {
-    public class PlayerDash : MonoBehaviour
+    public class PlayerDash : BaseComponent<PlayerDash>
     {
         [SerializeField] private Rigidbody characterRigidbody;
 
@@ -59,13 +61,12 @@ namespace Framework.Behaviours.Movement
     
     public class PlayerDashState : PlayerStateMachine
     {
-        public override void OnEnter()
-        {
-            base.OnEnter();
-        }
+        public PlayerDash PlayerDash { get; }
         
         public PlayerDashState(PlayerController playerController) : base(playerController)
         {
+            playerController.TryGetEntityOfType(out PlayerDash playerDash);
+            PlayerDash = playerDash;
         }
     }
 }

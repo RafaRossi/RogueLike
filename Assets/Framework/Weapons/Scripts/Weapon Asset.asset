@@ -14,24 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponPrefab: {fileID: 0}
   weaponData:
-  - rid: 7706638799432318976
   - rid: 7706638799432318977
   - rid: 7706638799432318978
+  - rid: 7706638799432318979
   references:
     version: 2
     RefIds:
-    - rid: 7706638799432318976
-      type: {class: IWeaponData, ns: , asm: Assembly-CSharp}
-      data:
-        Name: 
     - rid: 7706638799432318977
       type: {class: MightySword, ns: , asm: Assembly-CSharp}
       data:
-        Name: 
         power: 0
+        <Name>k__BackingField: asdasda
+        model: {fileID: 0}
     - rid: 7706638799432318978
       type: {class: MightShield, ns: , asm: Assembly-CSharp}
       data:
-        Name: 
         power: 0
         defense: 0
+        <Name>k__BackingField: asdasda
+    - rid: 7706638799432318979
+      type: {class: MightyGun, ns: , asm: Assembly-CSharp}
+      data:
+        bullet: {fileID: 0}

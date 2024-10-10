@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Framework.Behaviours.Animations;
 using Framework.Health_System;
+using Framework.State_Machine;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DamageComponent : MonoBehaviour, IDamageable
+public class DamageComponent : BaseComponent<DamageComponent>, IDamageable
 {
     [SerializeField] private HealthComponent healthComponent;
     
@@ -13,7 +15,7 @@ public class DamageComponent : MonoBehaviour, IDamageable
     {
         var currentHealth = healthComponent.CurrentHealth;
 
-        currentHealth -= damage.damageAmount;
+        //currentHealth -= damage.damageAmount;
         healthComponent.SetCurrentHealth(currentHealth);
 
         OnTakeDamage?.Invoke(damage);
@@ -29,8 +31,28 @@ public interface IDamageable
     UnityEvent<Damage> OnTakeDamage { get; set; }
 }
 
+public interface IDamageDealer
+{
+    void DealDamage(Damage damage, IDamageable damageable);
+}
+
 [Serializable]
 public class Damage
 {
-    public float damageAmount;
+    public Dictionary<DamageType, float> damageData = new Dictionary<DamageType, float>();
+
+    public Damage()
+    {
+        foreach (DamageType key in Enum.GetValues(typeof(DamageType)))
+        {
+            damageData.Add(key, 0f);
+        }
+    }
+}
+
+public enum DamageType
+{
+    Normal,
+    Special,
+    True
 }

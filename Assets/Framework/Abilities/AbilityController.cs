@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Framework.Behaviours.Animations;
 using UnityEngine;
 
 namespace Framework.Abilities
 {
-    public class AbilityController : MonoBehaviour
+    public class AbilityController : BaseComponent<AbilityController>
     {
         private readonly Dictionary<AbilityStrategy, IAbility> _abilities = new Dictionary<AbilityStrategy, IAbility>();
         

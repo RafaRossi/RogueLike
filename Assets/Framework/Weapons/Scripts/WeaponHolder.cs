@@ -23,25 +23,30 @@ namespace Framework.Weapons.Scripts
             }
         }
 
-        public void UseWeaponRequest()
+        public void UseWeaponPrimaryRequest()
         {
-            _currentWeapon?.UseWeapon();
+            _currentWeapon.UseWeaponPrimary();
+        }
+
+        public void UseWeaponSecondaryRequest()
+        {
+            _currentWeapon.UseWeaponSecondary();
         }
 
         private void InstantiateWeapon(WeaponAsset weaponAsset)
         {
             if(_currentWeapon != null) onUnEquipWeapon?.Invoke(_currentWeapon);
             
-            _currentWeapon = CreateWeapon(weaponAsset.weaponPrefab, transform);
+            _currentWeapon = CreateWeapon(weaponAsset, this);
             
             onEquipWeapon?.Invoke(_currentWeapon);
         }
 
         public IWeapon GetCurrentWeapon() => _currentWeapon;
 
-        private static IWeapon CreateWeapon(GameObject weaponPrefab, Transform origin)
+        private static Weapon CreateWeapon(WeaponAsset weaponAsset, WeaponHolder origin)
         {
-            return new Builder().Build(weaponPrefab, origin);
+            return new Builder().Build(weaponAsset, origin);
         }
 
         private class Builder
@@ -63,11 +68,9 @@ namespace Framework.Weapons.Scripts
                 return this;
             }
         
-            public IWeapon Build(GameObject weaponPrefab, Transform origin)
+            public Weapon Build(WeaponAsset weaponAsset, WeaponHolder origin)
             {
-                var weapon = Instantiate(weaponPrefab, _position, _rotation, origin);
-
-                return weapon.GetComponent<IWeapon>();
+                return Instantiate(weaponAsset.weaponPrefab, _position, _rotation, origin.transform).Initialize(origin);
             }
         }
     }
@@ -75,5 +78,8 @@ namespace Framework.Weapons.Scripts
 
 public interface IWeapon
 {
-    void UseWeapon();
+    public string Name { get; set; }
+
+    void UseWeaponPrimary();
+    void UseWeaponSecondary();
 }
