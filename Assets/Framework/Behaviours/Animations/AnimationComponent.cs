@@ -18,9 +18,14 @@ namespace Framework.Behaviours.Animations
     {
         [SerializeField] private Animator animatorController;
 
-        public void PlayAnimation(int animationHash, float fadeDuration = 0.2f)
+        public void PlayAnimationCrossFade(int animationHash, float fadeDuration = 0.2f)
         {
             animatorController.CrossFadeInFixedTime(animationHash, fadeDuration);
+        }
+
+        public void PlayAnimation(int id, float value)
+        {
+            animatorController.SetFloat(id, value);
         }
     }
 }

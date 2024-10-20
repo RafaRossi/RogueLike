@@ -1,8 +1,10 @@
 using System;
 using Framework.Entities;
 using Framework.Weapons.Scripts;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Framework.Weapons.Scripts
 {
@@ -10,16 +12,16 @@ namespace Framework.Weapons.Scripts
     {
         private IWeapon _currentWeapon;
 
-        [SerializeField] private WeaponAsset initialWeaponAsset;
+        [SerializeField] private WeaponAsset currentWeaponAsset;
 
         public UnityEvent<IWeapon> onEquipWeapon = new UnityEvent<IWeapon>();
         public UnityEvent<IWeapon> onUnEquipWeapon = new UnityEvent<IWeapon>();
         
         private void Start()
         {
-            if (initialWeaponAsset != null)
+            if (currentWeaponAsset != null)
             {
-                InstantiateWeapon(initialWeaponAsset);
+                InstantiateWeapon(currentWeaponAsset);
             }
         }
 
@@ -44,9 +46,11 @@ namespace Framework.Weapons.Scripts
 
         public IWeapon GetCurrentWeapon() => _currentWeapon;
 
+        public WeaponAsset GetWeaponAsset() => currentWeaponAsset;
+
         private static Weapon CreateWeapon(WeaponAsset weaponAsset, WeaponHolder origin)
         {
-            return new Builder().Build(weaponAsset, origin);
+            return new Builder().WithPosition(origin.transform.position).WithRotation(Quaternion.identity).Build(weaponAsset, origin);
         }
 
         private class Builder

@@ -1,24 +1,21 @@
 using System;
-using System.Collections.Generic;
 using Framework.Behaviours.Animations;
-using Framework.Behaviours.Target;
-using Framework.Entities;
+using Framework.Behaviours.Attack;
 using Framework.Inputs;
 using Framework.Player;
 using Framework.State_Machine;
 using Framework.Stats;
-using Project.Utils;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Framework.Behaviours.Movement
 {
     public class PlayerMovement : BaseComponent<PlayerMovement>
     {
         [SerializeField] private PlayerController playerController;
-        //[SerializeField] private CharacterController characterController;
         [SerializeField] private Rigidbody characterRigidbody;
+
+        [SerializeField] private Animator animator;
         
         private Camera _camera;
 
@@ -26,8 +23,6 @@ namespace Framework.Behaviours.Movement
         public Vector3 FacingDirection { get; private set; } = Vector3.zero;
         
         private float MaxSpeed => playerController.TryGetEntityOfType<StatsComponent>(out var stats) ? stats.GetStat<MoveSpeedStat>().Value : 20f;
-
-        [SerializeField] private float acceleration = 10f;
 
         private Plane _plane = new Plane();
 
@@ -46,17 +41,13 @@ namespace Framework.Behaviours.Movement
 
         public void Move()
         {
-            //characterController.Move(MovementDirection.normalized * (playerController.StatsComponent.StatsAttributes.MoveSpeed.Value * Time.fixedDeltaTime));
-
-            characterRigidbody.velocity = new Vector3(MovementDirection.x * MaxSpeed, characterRigidbody.velocity.y,
-                MovementDirection.z * MaxSpeed);
+            /*characterRigidbody.velocity = new Vector3(MovementDirection.x * MaxSpeed, characterRigidbody.velocity.y,
+                MovementDirection.z * MaxSpeed);*/
         }
         
         public void RotateInput(Vector3 facingDirection)
         {
             FacingDirection = GetDesiredRotation(facingDirection);
-
-            //FacingDirection = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * FacingDirection;
         }
 
         public void RotateWithMouse()
@@ -69,7 +60,7 @@ namespace Framework.Behaviours.Movement
             if (MovementDirection != Vector3.zero)
             {
                 var desiredRotation = Quaternion.LookRotation(MovementDirection, Vector3.up);
-                characterRigidbody.rotation = Quaternion.RotateTowards(characterRigidbody.rotation, desiredRotation, 500f * Time.deltaTime);
+                characterRigidbody.rotation = Quaternion.RotateTowards(characterRigidbody.rotation, desiredRotation, 1000f * Time.deltaTime);
             }
         }
         
@@ -82,12 +73,18 @@ namespace Framework.Behaviours.Movement
             return ray.GetPoint(distance);
         }
 
+        private void OnAnimatorMove()
+        {
+            var deltaPosition = animator.deltaPosition;
+            characterRigidbody.velocity += deltaPosition;
+        }
     }
-    
     
     public class PlayerLocomotionState : PlayerStateMachine
     {
         private readonly PlayerMovement _playerMovement;
+
+        private static readonly int MovementAnimationHash = Animator.StringToHash("Movement");
         
         public override void FixedUpdate()
         {
@@ -99,38 +96,35 @@ namespace Framework.Behaviours.Movement
 
         public PlayerLocomotionState(PlayerController playerController) : base(playerController)
         {
-            playerController.TryGetEntityOfType(out _playerMovement);
-            
             var moveInputEvent = new UnityEvent<Vector3>();
-            moveInputEvent.AddListener(_playerMovement.MoveInput);
+
+            if (playerController.TryGetEntityOfType(out _playerMovement))
+            {
+                moveInputEvent.AddListener(_playerMovement.MoveInput);
+            }
+            
+            if (playerController.TryGetEntityOfType(out AnimationComponent animationComponent))
+            {
+                moveInputEvent.AddListener((input) =>
+                {
+                    animationComponent.PlayAnimation(MovementAnimationHash, input.normalized.magnitude);
+                });
+            }
 
             var dashInputEvent = new UnityEvent();
             dashInputEvent.AddListener(playerController.GetEntityOfType<PlayerDash>().DashRequest);
-
-            var attackInputEvent = new UnityEvent<Vector3>();
-            attackInputEvent.AddListener(_playerMovement.RotateInput);
+            
+            var attackInputEvent = new UnityEvent();
+            if (playerController.TryGetEntityOfType<AttackController>(out var attackController))
+            {
+                attackInputEvent.AddListener(attackController.PrimaryAttackRequest);
+            }
 
             playerInput = new PlayerInput.Builder()
                 .WithAxisInputEvent(new AxisInputEvent(moveInputEvent))
+                .WithMouseInputEvent(new MouseInputEvent(attackInputEvent))
                 .WithTriggerInputEvent(new TriggerInputEvent("Dash", dashInputEvent))
                 .Build();
-        }
-    }
-
-    public class PlayerAttackState : PlayerStateMachine
-    {
-        private readonly PlayerMovement _playerMovement;
-        
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
-            
-            _playerMovement.RotateWithMouse();
-        }
-
-        public PlayerAttackState(PlayerController playerController) : base(playerController)
-        {
-            playerController.TryGetEntityOfType(out _playerMovement);
         }
     }
 }

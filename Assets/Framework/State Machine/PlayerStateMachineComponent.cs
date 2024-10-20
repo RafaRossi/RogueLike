@@ -1,5 +1,6 @@
 using System;
 using Framework.Behaviours.Animations;
+using Framework.Behaviours.Attack;
 using Framework.Behaviours.Movement;
 using Framework.Inputs;
 using Framework.Player;
@@ -20,7 +21,8 @@ namespace Framework.State_Machine
 
             _stateMachine.AddTransition(locomotionState, dashState, new FuncPredicate(() => dashState.PlayerDash.IsDashing));
             _stateMachine.AddTransition(dashState,locomotionState, new FuncPredicate(() => !dashState.PlayerDash.IsDashing));
-            
+            _stateMachine.AddTransition(locomotionState, attackState, new FuncPredicate(() => attackState.IsAttacking));
+            _stateMachine.AddTransition(attackState, locomotionState, new FuncPredicate(() => !attackState.IsAttacking));
             
             _stateMachine.SetState(locomotionState);
         }

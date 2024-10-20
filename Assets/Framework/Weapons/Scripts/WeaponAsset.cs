@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Framework.Behaviours.Attack;
 using UnityEngine;
 
 namespace Framework.Weapons.Scripts
@@ -7,5 +9,6 @@ namespace Framework.Weapons.Scripts
     public class WeaponAsset : ScriptableObject
     {
         public Weapon weaponPrefab;
+        public List<AttackData> attackData;
     }
 }

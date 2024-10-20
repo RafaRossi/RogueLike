@@ -48,8 +48,11 @@ namespace Framework.Inputs
             foreach (var mouseInputEvent in mouseInputEvents)
             {
                 mouseInputEvent.positionEventInput?.Invoke(Input.mousePosition);
-
-                if (Input.GetMouseButtonDown(0))
+            }
+            
+            if (Input.GetMouseButtonDown(0))
+            {
+                foreach (var mouseInputEvent in mouseInputEvents)
                 {
                     mouseInputEvent.triggerClickEventInput?.Invoke();
                 }
@@ -156,7 +159,23 @@ namespace Framework.Inputs
     [Serializable]
     public class MouseInputEvent
     {
-        public UnityEvent<Vector3> positionEventInput = new UnityEvent<Vector3>();
-        public UnityEvent triggerClickEventInput = new UnityEvent();
+        public UnityEvent<Vector3> positionEventInput;
+        public UnityEvent triggerClickEventInput;
+
+        public MouseInputEvent(UnityEvent<Vector3> positionEventInput, UnityEvent triggerClickEventInput)
+        {
+            this.positionEventInput = positionEventInput;
+            this.triggerClickEventInput = triggerClickEventInput;
+        }
+
+        public MouseInputEvent(UnityEvent<Vector3> positionEventInput)
+        {
+            this.positionEventInput = positionEventInput;
+        }
+        
+        public MouseInputEvent(UnityEvent triggerClickEventInput)
+        {
+            this.triggerClickEventInput = triggerClickEventInput;
+        }
     }
 }
