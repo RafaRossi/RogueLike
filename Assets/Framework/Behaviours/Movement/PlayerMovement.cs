@@ -41,8 +41,10 @@ namespace Framework.Behaviours.Movement
 
         public void Move()
         {
-            /*characterRigidbody.velocity = new Vector3(MovementDirection.x * MaxSpeed, characterRigidbody.velocity.y,
-                MovementDirection.z * MaxSpeed);*/
+            var deltaPosition = animator.deltaPosition / Time.deltaTime;
+
+            characterRigidbody.velocity = new Vector3(deltaPosition.x, characterRigidbody.velocity.y,
+                deltaPosition.z);
         }
         
         public void RotateInput(Vector3 facingDirection)
@@ -60,7 +62,7 @@ namespace Framework.Behaviours.Movement
             if (MovementDirection != Vector3.zero)
             {
                 var desiredRotation = Quaternion.LookRotation(MovementDirection, Vector3.up);
-                characterRigidbody.rotation = Quaternion.RotateTowards(characterRigidbody.rotation, desiredRotation, 1000f * Time.deltaTime);
+                characterRigidbody.rotation = Quaternion.RotateTowards(characterRigidbody.rotation, desiredRotation, 2000f * Time.deltaTime);
             }
         }
         
@@ -71,12 +73,6 @@ namespace Framework.Behaviours.Movement
 
             _plane.Raycast(ray, out var distance);
             return ray.GetPoint(distance);
-        }
-
-        private void OnAnimatorMove()
-        {
-            var deltaPosition = animator.deltaPosition;
-            characterRigidbody.velocity += deltaPosition;
         }
     }
     
@@ -90,8 +86,14 @@ namespace Framework.Behaviours.Movement
         {
             base.FixedUpdate();
             
-            _playerMovement.Move();
             _playerMovement.RotateWithAxis();
+        }
+
+        public override void OnAnimatorMove()
+        {
+            base.OnAnimatorMove();
+            
+            _playerMovement.Move();
         }
 
         public PlayerLocomotionState(PlayerController playerController) : base(playerController)

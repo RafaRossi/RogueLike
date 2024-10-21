@@ -111,7 +111,7 @@ MonoBehaviour:
   <ComponentController>k__BackingField: {fileID: 6935264617506408839}
   characterRigidbody: {fileID: 873447952675208058}
   dashDuration: 0.1
-  dashForce: 2
+  dashForce: 10
   onDashStart:
     m_PersistentCalls:
       m_Calls:
@@ -134,18 +134,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.TrailRenderer, UnityEngine
         m_MethodName: set_emitting
         m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 8245290722670073361}
-        m_TargetAssemblyTypeName: UnityEngine.TrailRenderer, UnityEngine
-        m_MethodName: Clear
-        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -930,6 +918,54 @@ Transform:
   - {fileID: 8306947904063621098}
   m_Father: {fileID: 8730783359529419025}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2483882519616373176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 352161930759211758}
+  - component: {fileID: 7269003537636632977}
+  m_Layer: 0
+  m_Name: Character Movement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &352161930759211758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2483882519616373176}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 619041190620615675}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7269003537636632977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2483882519616373176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69077304c089b4a4bbc028ff86f11b35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ComponentController>k__BackingField: {fileID: 6935264617506408839}
+  playerController: {fileID: 6935264617506408839}
+  characterRigidbody: {fileID: 873447952675208058}
+  animator: {fileID: 8655571471965450168}
 --- !u!1 &2717139647884750712
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,7 +976,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3386399819017532866}
   - component: {fileID: 8655571471965450168}
-  - component: {fileID: 1319702144898312467}
+  - component: {fileID: 8788223518573346564}
   m_Layer: 0
   m_Name: Render
   m_TagString: Untagged
@@ -986,7 +1022,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1319702144898312467
+--- !u!114 &8788223518573346564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -995,13 +1031,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 2717139647884750712}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69077304c089b4a4bbc028ff86f11b35, type: 3}
+  m_Script: {fileID: 11500000, guid: b9b2a98c9c976584892cd5c1bca58c1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <ComponentController>k__BackingField: {fileID: 6935264617506408839}
-  playerController: {fileID: 6935264617506408839}
-  characterRigidbody: {fileID: 873447952675208058}
-  animator: {fileID: 8655571471965450168}
+  animatorController: {fileID: 8655571471965450168}
+  onAnimatorMove:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2747698886844779566}
+        m_TargetAssemblyTypeName: Framework.State_Machine.PlayerStateMachineComponent,
+          Assembly-CSharp
+        m_MethodName: OnAnimatorMove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2755519511014090505
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,7 +1078,7 @@ Transform:
   m_GameObject: {fileID: 2755519511014090505}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.371, z: 0.887}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1076,7 +1126,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.07
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -2492,52 +2542,6 @@ Transform:
   - {fileID: 8175299328471141669}
   m_Father: {fileID: 3513367389492882913}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6545358696657757711
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8108153886707897387}
-  - component: {fileID: 4432801734646324432}
-  m_Layer: 0
-  m_Name: Character Animation
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8108153886707897387
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6545358696657757711}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 619041190620615675}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4432801734646324432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6545358696657757711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9b2a98c9c976584892cd5c1bca58c1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <ComponentController>k__BackingField: {fileID: 6935264617506408839}
-  animatorController: {fileID: 8655571471965450168}
 --- !u!1 &6694153991717771962
 GameObject:
   m_ObjectHideFlags: 0
@@ -2834,7 +2838,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 116
@@ -3119,10 +3123,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2913947459220199980}
-  - {fileID: 8108153886707897387}
   - {fileID: 4615774944006142227}
   - {fileID: 8335824345518550122}
   - {fileID: 1927413391866151827}
+  - {fileID: 352161930759211758}
   m_Father: {fileID: 2761240716605353248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9218824530072940664

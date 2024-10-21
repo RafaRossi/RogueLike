@@ -5,6 +5,7 @@
         public abstract void OnEnter();
         public abstract void Update();
         public abstract void FixedUpdate();
+        public abstract void OnAnimatorMove();
 
         public abstract void OnExit();
     }

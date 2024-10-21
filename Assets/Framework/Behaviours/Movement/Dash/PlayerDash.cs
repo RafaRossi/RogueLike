@@ -68,5 +68,10 @@ namespace Framework.Behaviours.Movement
             playerController.TryGetEntityOfType(out PlayerDash playerDash);
             PlayerDash = playerDash;
         }
+
+        public override void OnAnimatorMove()
+        {
+            
+        }
     }
 }

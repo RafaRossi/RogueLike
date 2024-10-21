@@ -111,13 +111,16 @@ namespace Framework.Behaviours.Attack
         public override void OnEnter()
         {
             base.OnEnter();
-            Debug.Log("OIIIIII");
+        }
+
+        public override void OnAnimatorMove()
+        {
+            
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            Debug.Log("TCHAUUU");
         }
 
         public override void FixedUpdate()

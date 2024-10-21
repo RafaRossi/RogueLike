@@ -1,6 +1,7 @@
 using System;
 using Framework.Entities;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class BaseComponent<T> : MonoBehaviour, IComponent where T : IComponent
 {
@@ -17,6 +18,7 @@ namespace Framework.Behaviours.Animations
     public class AnimationComponent : BaseComponent<AnimationComponent>
     {
         [SerializeField] private Animator animatorController;
+        [SerializeField] private UnityEvent onAnimatorMove = new UnityEvent();
 
         public void PlayAnimationCrossFade(int animationHash, float fadeDuration = 0.2f)
         {
@@ -26,6 +28,11 @@ namespace Framework.Behaviours.Animations
         public void PlayAnimation(int id, float value)
         {
             animatorController.SetFloat(id, value);
+        }
+
+        public void OnAnimatorMove()
+        {
+            onAnimatorMove?.Invoke();
         }
     }
 }

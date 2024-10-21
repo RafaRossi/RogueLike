@@ -36,6 +36,11 @@ namespace Framework.State_Machine
         {
             _stateMachine.FixedUpdate();
         }
+
+        public void OnAnimatorMove()
+        {
+            _stateMachine.OnAnimatorMove();
+        }
     }
     
     public abstract class PlayerStateMachine : BaseState
@@ -71,6 +76,11 @@ namespace Framework.State_Machine
         public override void FixedUpdate()
         {
 
+        }
+
+        public override void OnAnimatorMove()
+        {
+            
         }
 
         public override void OnExit()

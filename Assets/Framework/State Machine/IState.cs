@@ -5,6 +5,7 @@ namespace Framework.State_Machine
         void OnEnter();
         void Update();
         void FixedUpdate();
+        void OnAnimatorMove();
         void OnExit();
     }
 }

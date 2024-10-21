@@ -29,6 +29,11 @@ namespace Framework.State_Machine
             _current.State?.FixedUpdate();
         }
 
+        public void OnAnimatorMove()
+        {
+            _current.State?.OnAnimatorMove();
+        }
+
         private void ChangeState(IState state)
         {
             if(state == _current.State) return;
