@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Project.Utils;
+using UnityEngine;
 
 namespace Framework.State_Machine
 {
@@ -27,11 +28,6 @@ namespace Framework.State_Machine
         public void FixedUpdate()
         {
             _current.State?.FixedUpdate();
-        }
-
-        public void OnAnimatorMove()
-        {
-            _current.State?.OnAnimatorMove();
         }
 
         private void ChangeState(IState state)

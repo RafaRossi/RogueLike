@@ -13,7 +13,7 @@ namespace Framework.Player
 {
     public class PlayerController : ComponentController
     {
-        private void Awake()
+        private void Start()
         {
             if(TryGetEntityOfType<PlayerStateMachineComponent>(out var stateMachine))
             {

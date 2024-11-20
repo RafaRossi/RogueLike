@@ -1,4 +1,5 @@
 using System;
+using Framework.Behaviours.Attack;
 using Framework.Entities;
 using Framework.Weapons.Scripts;
 using Unity.Mathematics;
@@ -16,6 +17,10 @@ namespace Framework.Weapons.Scripts
 
         public UnityEvent<IWeapon> onEquipWeapon = new UnityEvent<IWeapon>();
         public UnityEvent<IWeapon> onUnEquipWeapon = new UnityEvent<IWeapon>();
+
+        public UnityEvent onUsePrimaryWeapon = new UnityEvent();
+        
+        public AttackController AttackController { get; private set; }
         
         private void Start()
         {
@@ -83,6 +88,7 @@ namespace Framework.Weapons.Scripts
 public interface IWeapon
 {
     public string Name { get; set; }
+    public WeaponHolder WeaponHolder { get; set; }
 
     void UseWeaponPrimary();
     void UseWeaponSecondary();

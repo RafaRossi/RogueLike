@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Framework.Behaviours.Animations;
 using Framework.Behaviours.Movement;
 using Framework.Inputs;
 using Framework.Player;
@@ -13,6 +14,7 @@ namespace Framework.Behaviours.Attack
 {
     public class AttackController : BaseComponent<AttackController>
     {
+        [SerializeField] private AnimationComponent animationComponent;
         [field:SerializeField] public WeaponHolder WeaponHolder { get; private set; }
         
         public List<AttackData> attacksData = new List<AttackData>();
@@ -20,6 +22,11 @@ namespace Framework.Behaviours.Attack
         private int _currentAttackData = -1;
 
         public float LastAttackRequest { get; private set; }
+
+        private bool _canAttack = true;
+
+
+        public bool IsAttacking { get; set; }
 
         private void OnEnable()
         {
@@ -43,7 +50,8 @@ namespace Framework.Behaviours.Attack
 
         public void PrimaryAttackRequest()
         {
-            if (_currentAttackData < 0)
+            if(_canAttack) WeaponHolder.UseWeaponPrimaryRequest();
+            /*if (_currentAttackData < 0)
             {
                 _currentAttackData++;
             }
@@ -63,12 +71,12 @@ namespace Framework.Behaviours.Attack
 
                     LastAttackRequest = Time.time;
                 }
-            }
+            }*/
         }
 
         public void SecondaryAttackRequest()
         {
-            WeaponHolder.UseWeaponSecondaryRequest();
+            if(_canAttack) WeaponHolder.UseWeaponSecondaryRequest();
         }
 
         public AttackData GetCurrentAttack()
@@ -96,40 +104,14 @@ namespace Framework.Behaviours.Attack
     {
         private readonly PlayerMovement _playerMovement;
         private readonly AttackController _attackController;
+        
+        public bool IsAttacking => _attackController.IsAttacking;
 
-        public bool IsAttacking {
-            get
-            {
-                var currentAttack = _attackController.GetCurrentAttack() != null;
-                return currentAttack && _attackController.GetCurrentAttack().attacktime > Time.time - _attackController.LastAttackRequest;
-            }  
-        }
-
-
-        private float _currentAttackTime;
-
-        public override void OnEnter()
+        private void CorrectAnimationMovement(Vector3 deltaPosition)
         {
-            base.OnEnter();
+            _playerMovement.Move(deltaPosition);
         }
-
-        public override void OnAnimatorMove()
-        {
-            
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-        }
-
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
-            
-            _playerMovement.RotateWithMouse();
-        }
-
+        
         public PlayerAttackState(PlayerController playerController) : base(playerController)
         {
             var attackInputAxisEvent = new UnityEvent<Vector3>();
@@ -143,11 +125,17 @@ namespace Framework.Behaviours.Attack
 
             if (playerController.TryGetEntityOfType(out _attackController))
             {
-                attackInputEvent.AddListener(_attackController.PrimaryAttackRequest);
+                /*attackInputEvent.AddListener(_playerMovement.RotateWithMouse);
+                attackInputEvent.AddListener(_attackController.PrimaryAttackRequest);*/
+            }
+            
+            if (playerController.TryGetEntityOfType(out AnimationComponent animationComponent))
+            {
+                animationComponent.RegisterAnimatorMove(CorrectAnimationMovement);
             }
 
             playerInput = new PlayerInput.Builder()
-                .WithAxisInputEvent(new AxisInputEvent(attackInputAxisEvent))
+                .WithMouseInputEvent(new MouseInputEvent(attackInputAxisEvent))
                 .WithMouseInputEvent(new MouseInputEvent(attackInputEvent))
                 .Build();
         }

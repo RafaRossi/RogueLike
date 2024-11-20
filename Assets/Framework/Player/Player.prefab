@@ -965,7 +965,6 @@ MonoBehaviour:
   <ComponentController>k__BackingField: {fileID: 6935264617506408839}
   playerController: {fileID: 6935264617506408839}
   characterRigidbody: {fileID: 873447952675208058}
-  animator: {fileID: 8655571471965450168}
 --- !u!1 &2717139647884750712
 GameObject:
   m_ObjectHideFlags: 0
@@ -977,6 +976,7 @@ GameObject:
   - component: {fileID: 3386399819017532866}
   - component: {fileID: 8655571471965450168}
   - component: {fileID: 8788223518573346564}
+  - component: {fileID: 4083762706101008501}
   m_Layer: 0
   m_Name: Render
   m_TagString: Untagged
@@ -1036,22 +1036,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ComponentController>k__BackingField: {fileID: 6935264617506408839}
   animatorController: {fileID: 8655571471965450168}
+  animationEventReceiver: {fileID: 4083762706101008501}
   onAnimatorMove:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2747698886844779566}
-        m_TargetAssemblyTypeName: Framework.State_Machine.PlayerStateMachineComponent,
-          Assembly-CSharp
-        m_MethodName: OnAnimatorMove
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &4083762706101008501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2717139647884750712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da918834910c4fc3a6764a4277b7d201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationEvents:
+  - eventName: EnterAttacking
+    onAnimationEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1807235204289297567}
+          m_TargetAssemblyTypeName: Framework.Behaviours.Attack.AttackController,
+            Assembly-CSharp
+          m_MethodName: set_IsAttacking
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - eventName: ExitAttacking
+    onAnimationEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1807235204289297567}
+          m_TargetAssemblyTypeName: Framework.Behaviours.Attack.AttackController,
+            Assembly-CSharp
+          m_MethodName: set_IsAttacking
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2755519511014090505
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,6 +1976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ComponentController>k__BackingField: {fileID: 6935264617506408839}
+  animationComponent: {fileID: 8788223518573346564}
   <WeaponHolder>k__BackingField: {fileID: 5057102546463067015}
   attacksData: []
 --- !u!1 &4909348157310347645
@@ -1995,9 +2031,9 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6922793697723135513, guid: 7e2aa656d18b1464984350cf66bd00ce, type: 3}
-  - {fileID: -6629797300637803691, guid: 7e2aa656d18b1464984350cf66bd00ce, type: 3}
-  - {fileID: -876546973899608171, guid: 7e2aa656d18b1464984350cf66bd00ce, type: 3}
+  - {fileID: 2100000, guid: 154921cb78c3c17489ac5bf46d8b7876, type: 2}
+  - {fileID: 2100000, guid: edb01dc831159ce49bbdf75d494ba7a9, type: 2}
+  - {fileID: 2100000, guid: 814ad752b155a274e9dc9095772a034e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2840,7 +2876,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 1
 --- !u!136 &262431101145790090

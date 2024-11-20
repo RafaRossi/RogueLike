@@ -18,10 +18,5 @@ namespace Framework.Weapons.Scripts
         {
             
         }
-
-        public override Weapon Initialize(WeaponHolder weaponHolder)
-        {
-            return this;
-        }
     }
 }

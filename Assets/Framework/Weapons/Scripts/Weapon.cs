@@ -5,11 +5,24 @@ namespace Framework.Weapons.Scripts
     public abstract class Weapon : MonoBehaviour, IWeapon
     {
         public string Name { get; set; }
+        
+        public WeaponHolder WeaponHolder { get; set; }
 
-        public abstract void UseWeaponPrimary();
+        public virtual void UseWeaponPrimary()
+        {
+            //WeaponHolder.AttackController.animationComponent.PlayAnimationCrossFade(Animator.StringToHash("Attack"));
+            WeaponHolder.onUsePrimaryWeapon?.Invoke();
+        }
 
-        public abstract void UseWeaponSecondary();
+        public virtual void UseWeaponSecondary()
+        {
+            
+        }
 
-        public abstract Weapon Initialize(WeaponHolder weaponHolder);
+        public virtual Weapon Initialize(WeaponHolder weaponHolder)
+        {
+            WeaponHolder = weaponHolder;
+            return this;
+        }
     }
 }

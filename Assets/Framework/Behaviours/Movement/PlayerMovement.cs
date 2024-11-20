@@ -14,8 +14,6 @@ namespace Framework.Behaviours.Movement
     {
         [SerializeField] private PlayerController playerController;
         [SerializeField] private Rigidbody characterRigidbody;
-
-        [SerializeField] private Animator animator;
         
         private Camera _camera;
 
@@ -39,20 +37,21 @@ namespace Framework.Behaviours.Movement
             MovementDirection = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * MovementDirection;
         }
 
-        public void Move()
+        public void Move(Vector3 direction)
         {
-            var deltaPosition = animator.deltaPosition / Time.deltaTime;
-
-            characterRigidbody.velocity = new Vector3(deltaPosition.x, characterRigidbody.velocity.y,
-                deltaPosition.z);
+            //Correcting Movement from Root Motion
+            characterRigidbody.velocity = new Vector3(direction.x, characterRigidbody.velocity.y,
+                direction.z).normalized * MaxSpeed;
         }
         
+
         public void RotateInput(Vector3 facingDirection)
         {
             FacingDirection = GetDesiredRotation(facingDirection);
+            RotateWithMouse();
         }
 
-        public void RotateWithMouse()
+        private void RotateWithMouse()
         {
             characterRigidbody.transform.LookAt(new Vector3(FacingDirection.x, characterRigidbody.position.y, FacingDirection.z));
         }
@@ -82,26 +81,35 @@ namespace Framework.Behaviours.Movement
 
         private static readonly int MovementAnimationHash = Animator.StringToHash("Movement");
         
-        public override void FixedUpdate()
+        public override void Update()
         {
-            base.FixedUpdate();
+            base.Update();
             
             _playerMovement.RotateWithAxis();
         }
 
-        public override void OnAnimatorMove()
+        private void Move(Vector3 direction)
         {
-            base.OnAnimatorMove();
-            
-            _playerMovement.Move();
+            _playerMovement.Move(direction);
         }
-
+        
         public PlayerLocomotionState(PlayerController playerController) : base(playerController)
         {
+            var attackInputEvent = new UnityEvent();
+            var attackInputDirectionEvent = new UnityEvent<Vector3>();
+            
+            if (playerController.TryGetEntityOfType<AttackController>(out var attackController))
+            {
+                attackInputEvent.AddListener(attackController.PrimaryAttackRequest);
+            }
+            
             var moveInputEvent = new UnityEvent<Vector3>();
 
             if (playerController.TryGetEntityOfType(out _playerMovement))
             {
+                attackInputDirectionEvent.AddListener(_playerMovement.RotateInput);
+                //attackInputEvent.AddListener(_playerMovement.RotateWithMouse);
+                
                 moveInputEvent.AddListener(_playerMovement.MoveInput);
             }
             
@@ -111,19 +119,16 @@ namespace Framework.Behaviours.Movement
                 {
                     animationComponent.PlayAnimation(MovementAnimationHash, input.normalized.magnitude);
                 });
+                
+                animationComponent.RegisterAnimatorMove(Move);
             }
 
             var dashInputEvent = new UnityEvent();
             dashInputEvent.AddListener(playerController.GetEntityOfType<PlayerDash>().DashRequest);
-            
-            var attackInputEvent = new UnityEvent();
-            if (playerController.TryGetEntityOfType<AttackController>(out var attackController))
-            {
-                attackInputEvent.AddListener(attackController.PrimaryAttackRequest);
-            }
 
             playerInput = new PlayerInput.Builder()
                 .WithAxisInputEvent(new AxisInputEvent(moveInputEvent))
+                .WithMouseInputEvent(new MouseInputEvent(attackInputDirectionEvent))
                 .WithMouseInputEvent(new MouseInputEvent(attackInputEvent))
                 .WithTriggerInputEvent(new TriggerInputEvent("Dash", dashInputEvent))
                 .Build();

@@ -45,15 +45,16 @@ namespace Framework.Inputs
                 axisInputEvent.axisInputEvent?.Invoke(input);
             }
 
-            foreach (var mouseInputEvent in mouseInputEvents)
+            /*foreach (var mouseInputEvent in mouseInputEvents)
             {
                 mouseInputEvent.positionEventInput?.Invoke(Input.mousePosition);
-            }
+            }*/
             
             if (Input.GetMouseButtonDown(0))
             {
                 foreach (var mouseInputEvent in mouseInputEvents)
                 {
+                    mouseInputEvent.positionEventInput?.Invoke(Input.mousePosition);
                     mouseInputEvent.triggerClickEventInput?.Invoke();
                 }
             }
@@ -160,6 +161,7 @@ namespace Framework.Inputs
     public class MouseInputEvent
     {
         public UnityEvent<Vector3> positionEventInput;
+        
         public UnityEvent triggerClickEventInput;
 
         public MouseInputEvent(UnityEvent<Vector3> positionEventInput, UnityEvent triggerClickEventInput)

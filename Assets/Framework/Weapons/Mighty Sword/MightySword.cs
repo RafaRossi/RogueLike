@@ -11,7 +11,6 @@ namespace Framework.Weapons.Scripts
 
         private readonly PercentageStatScaling _attackDamageScaling = new(0.8f);
         
-        
         public void DealDamage(Damage damage, IDamageable damageable)
         {
             damageable.TakeDamage(damage);
@@ -25,12 +24,6 @@ namespace Framework.Weapons.Scripts
         public override void UseWeaponSecondary()
         {
             
-        }
-
-        public override Weapon Initialize(WeaponHolder weaponHolder)
-        {
-            
-            return this;
         }
     }
 }

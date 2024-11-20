@@ -18,7 +18,9 @@ namespace Framework.Behaviours.Animations
     public class AnimationComponent : BaseComponent<AnimationComponent>
     {
         [SerializeField] private Animator animatorController;
-        [SerializeField] private UnityEvent onAnimatorMove = new UnityEvent();
+        [SerializeField] private AnimationEventReceiver animationEventReceiver;
+        
+        [SerializeField] private UnityEvent<Vector3> onAnimatorMove = new UnityEvent<Vector3>();
 
         public void PlayAnimationCrossFade(int animationHash, float fadeDuration = 0.2f)
         {
@@ -32,7 +34,12 @@ namespace Framework.Behaviours.Animations
 
         public void OnAnimatorMove()
         {
-            onAnimatorMove?.Invoke();
+            onAnimatorMove?.Invoke(animatorController.deltaPosition / Time.deltaTime);
+        }
+
+        public void RegisterAnimatorMove(UnityAction<Vector3> animatorEvent)
+        {
+            onAnimatorMove.AddListener(animatorEvent);
         }
     }
 }
